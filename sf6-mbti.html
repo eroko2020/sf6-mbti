@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STREET FIGHTER 6 | 人格診斷</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sf6-orange: #FF5F00;
+  --sf6-orange-dark: #CC4C00;
+  --sf6-yellow: #FFD700;
+  --sf6-blue: #00A8E8;
+  --sf6-dark: #0a0a0a;
+  --sf6-darker: #050505;
+  --sf6-gray: #1a1a1a;
+  --sf6-gray-light: #2a2a2a;
+  --sf6-white: #f0f0f0;
+  --sf6-red: #E02020;
+  --sf6-green: #20C040;
+  --font-display: 'Barlow Condensed', 'Noto Sans TC', sans-serif;
+  --font-body: 'Noto Sans TC', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--sf6-darker);
+  color: var(--sf6-white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ===== NAVIGATION BAR ===== */
+.sf6-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 56px;
+  background: rgba(5,5,5,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--sf6-orange);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+.sf6-nav .logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--sf6-orange);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.sf6-nav .logo span { color: var(--sf6-white); }
+.sf6-nav .nav-links {
+  display: flex;
+  gap: 28px;
+}
+.sf6-nav .nav-links a {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sf6-white);
+  text-decoration: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.sf6-nav .nav-links a:hover, .sf6-nav .nav-links a.active { color: var(--sf6-orange); }
+
+/* ===== HERO SECTION ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, rgba(255,95,0,0.08) 0%, transparent 70%);
+  z-index: 0;
+}
+.hero .hero-tag {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--sf6-orange);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 10vw, 120px);
+  font-weight: 900;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 .line1 { display: block; color: var(--sf6-white); }
+.hero h1 .line2 {
+  display: block;
+  color: var(--sf6-orange);
+  text-shadow: 4px 4px 0 rgba(0,0,0,0.5), -2px -2px 0 rgba(0,0,0,0.3);
+}
+.hero .hero-sub {
+  font-size: 16px;
+  color: #999;
+  margin-top: 24px;
+  max-width: 500px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+.hero .hero-btn {
+  display: inline-block;
+  margin-top: 40px;
+  padding: 16px 48px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sf6-white);
+  background: var(--sf6-orange);
+  border: none;
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+.hero .hero-btn:hover {
+  background: #FF7F2A;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,95,0,0.4);
+}
+
+/* ===== CHARACTER SELECT GRID ===== */
+.char-grid-section {
+  padding: 40px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.char-grid-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--sf6-white);
+}
+.char-grid-sub {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 4px;
+}
+.char-card {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  background: var(--sf6-gray);
+  border: 1px solid #222;
+}
+.char-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(255,95,0,0.3);
+  z-index: 10;
+}
+.char-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s;
+}
+.char-card:hover img { transform: scale(1.05); }
+.char-card .char-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--sf6-white);
+  text-align: center;
+}
+.char-card .char-cn {
+  font-size: 11px;
+  font-weight: 400;
+  color: #999;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ===== TEST INTERFACE ===== */
+.test-section {
+  display: none;
+  min-height: 100vh;
+  padding: 100px 24px 80px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.test-section.active { display: block; }
+
+.test-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.test-header .dim-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--sf6-orange);
+  text-transform: uppercase;
+}
+.test-header h2 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 8px 0;
+}
+
+/* HUD Progress Bar */
+.hud-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+.hud-bar .hud-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #888;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.hud-bar .hud-track {
+  flex: 1;
+  height: 8px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  overflow: hidden;
+}
+.hud-bar .hud-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sf6-green), #40E060);
+  transition: width 0.5s ease;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+}
+
+/* Dimension Tabs */
+.dim-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.dim-tab {
+  padding: 8px 20px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #666;
+  background: transparent;
+  border: 1px solid #333;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.dim-tab:hover { color: #aaa; border-color: #555; }
+.dim-tab.active {
+  color: var(--sf6-white);
+  background: var(--sf6-orange);
+  border-color: var(--sf6-orange);
+}
+
+/* Questions */
+.question-block {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: var(--sf6-gray);
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  border: 1px solid #222;
+}
+.question-block .q-num {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--sf6-orange);
+  margin-bottom: 12px;
+}
+.question-block .q-text {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--sf6-white);
+  margin-bottom: 20px;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--sf6-dark);
+  border: 1px solid #2a2a2a;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: #ccc;
+}
+.option-btn:hover {
+  border-color: var(--sf6-orange);
+  color: var(--sf6-white);
+  background: #111;
+}
+.option-btn.selected {
+  border-color: var(--sf6-orange);
+  background: rgba(255,95,0,0.12);
+  color: var(--sf6-white);
+}
+.option-btn .opt-marker {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  color: #444;
+  background: #111;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  flex-shrink: 0;
+  transition: all 0.25s;
+}
+.option-btn.selected .opt-marker {
+  color: var(--sf6-orange);
+  background: rgba(255,95,0,0.2);
+}
+
+.continue-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 40px auto 0;
+  padding: 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sf6-white);
+  background: var(--sf6-orange);
+  border: none;
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.continue-btn:hover:not(:disabled) {
+  background: #FF7F2A;
+  box-shadow: 0 8px 24px rgba(255,95,0,0.4);
+}
+.continue-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===== RESULT SECTION ===== */
+.result-section {
+  display: none;
+  min-height: 100vh;
+}
+.result-section.active { display: block; }
+
+.result-hero {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.result-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 40px 80px 60px;
+  z-index: 2;
+}
+.result-right {
+  flex: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.result-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  animation: charSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 40px rgba(0,0,0,0.5));
+}
+@keyframes charSlideIn {
+  from { opacity: 0; transform: translateX(60px) scale(0.9); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+.result-right::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 30%;
+  background: linear-gradient(transparent, var(--sf6-darker));
+  pointer-events: none;
+}
+
+.result-mbti {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 12vw, 140px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: 2px;
+  color: var(--sf6-white);
+  text-shadow: 6px 6px 0 var(--sf6-orange);
+  margin-bottom: 8px;
+}
+.result-name {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sf6-orange);
+  margin-bottom: 6px;
+}
+.result-cn {
+  font-size: 18px;
+  color: #999;
+  margin-bottom: 24px;
+}
+
+/* Status Bars */
+.status-bars { margin-bottom: 32px; }
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.status-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #888;
+  width: 70px;
+  text-align: right;
+}
+.status-track {
+  flex: 1;
+  height: 6px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+  overflow: hidden;
+}
+.status-fill {
+  height: 100%;
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.status-fill.hp { background: linear-gradient(90deg, #20C040, #40E060); }
+.status-fill.drive { background: linear-gradient(90deg, #FF5F00, #FF8F3F); }
+.status-fill.super { background: linear-gradient(90deg, #00A8E8, #40C8FF); }
+
+/* Dimension Analysis */
+.dim-analysis { margin-bottom: 28px; }
+.dim-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.dim-pair {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 1px;
+  width: 50px;
+  text-align: center;
+  font-size: 14px;
+}
+.dim-pair.left { color: #ccc; text-align: right; }
+.dim-pair.right { color: #ccc; text-align: left; }
+.dim-bar-outer {
+  flex: 1;
+  height: 18px;
+  background: #111;
+  border: 1px solid #222;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  overflow: hidden;
+  display: flex;
+}
+.dim-bar-inner {
+  height: 100%;
+  transition: width 0.8s ease;
+}
+.dim-bar-inner.left { background: var(--sf6-orange); }
+.dim-bar-inner.right { background: var(--sf6-blue); margin-left: auto; }
+
+/* Description */
+.result-desc {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #bbb;
+  margin-bottom: 20px;
+}
+.result-traits {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.trait-tag {
+  padding: 6px 14px;
+  font-size: 12px;
+  border: 1px solid #333;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  color: #aaa;
+}
+
+/* Compatible characters */
+.compat-section { margin-bottom: 24px; }
+.compat-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.compat-chars {
+  display: flex;
+  gap: 8px;
+}
+.compat-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+}
+.compat-chip img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  object-position: top;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+}
+.compat-chip span {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Action buttons */
+.result-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.r-btn {
+  padding: 12px 28px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.r-btn.primary {
+  color: var(--sf6-white);
+  background: var(--sf6-orange);
+  border: none;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.r-btn.primary:hover { background: #FF7F2A; }
+.r-btn.secondary {
+  color: #ccc;
+  background: transparent;
+  border: 1px solid #444;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.r-btn.secondary:hover { border-color: var(--sf6-orange); color: var(--sf6-orange); }
+
+/* ===== FOOTER ===== */
+.sf6-footer {
+  text-align: center;
+  padding: 24px;
+  border-top: 1px solid #1a1a1a;
+  color: #444;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .result-hero { flex-direction: column; }
+  .result-left { padding: 40px 20px; order: 2; }
+  .result-right { flex: none; height: 50vh; order: 1; }
+  .result-mbti { font-size: clamp(40px, 16vw, 100px); }
+  .sf6-nav { padding: 0 12px; }
+  .sf6-nav .nav-links { display: none; }
+  .char-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .test-section { padding: 90px 16px 40px; }
+  .dim-tabs { gap: 4px; }
+  .dim-tab { padding: 6px 12px; font-size: 12px; letter-spacing: 1px; }
+  .option-btn { padding: 12px 14px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="sf6-nav">
+  <div class="logo">SF<span>6</span></div>
+  <div class="nav-links">
+    <a href="#" class="active" data-nav="home">HOME</a>
+    <a href="#" data-nav="test">TEST</a>
+    <a href="#" data-nav="characters">CHARACTERS</a>
+  </div>
+</nav>
+
+<!-- HERO / HOME -->
+<section class="hero" id="home-section">
+  <div class="hero-tag">PERSONALITY DIAGNOSIS</div>
+  <h1>
+    <span class="line1">WHAT'S YOUR</span>
+    <span class="line2">FIGHTING STYLE?</span>
+  </h1>
+  <p class="hero-sub">
+    透過 20 道情境式問答，找出你在《Street Fighter 6》中最匹配的格鬥家。每個選擇，都揭示你內心深處的戰鬥本能。
+  </p>
+  <button class="hero-btn" onclick="startTest()">START TEST</button>
+</section>
+
+<!-- CHARACTER GRID -->
+<section class="char-grid-section" id="characters-section">
+  <div class="char-grid-title">CHARACTER SELECT</div>
+  <div class="char-grid-sub">點擊角色檢視其 MBTI 對應</div>
+  <div class="char-grid" id="charGrid"></div>
+</section>
+
+<!-- TEST SECTION -->
+<section class="test-section" id="test-section">
+  <div class="test-header">
+    <div class="dim-label" id="dimLabel">DIMENSION 1/4</div>
+    <h2 id="dimTitle">ENERGY</h2>
+  </div>
+  <div class="hud-bar">
+    <span class="hud-label">PROGRESS</span>
+    <div class="hud-track"><div class="hud-fill" id="hudFill" style="width:0%"></div></div>
+    <span style="font-family:var(--font-display);font-size:12px;font-weight:700;color:#888" id="hudPercent">0/20</span>
+  </div>
+  <div class="dim-tabs" id="dimTabs"></div>
+  <div id="questionContainer"></div>
+  <button class="continue-btn" id="continueBtn" disabled onclick="nextQuestion()">NEXT</button>
+</section>
+
+<!-- RESULT SECTION -->
+<section class="result-section" id="result-section">
+  <div class="result-hero" id="resultHero">
+    <div class="result-left" id="resultLeft"></div>
+    <div class="result-right" id="resultRight"></div>
+  </div>
+  <div class="sf6-footer">©CAPCOM  STREET FIGHTER 6  PERSONALITY DIAGNOSIS</div>
+</section>
+
+<script>
+// ==================== DATA ====================
+
+// Character data with MBTI mapping and theme colors
+const CHARACTERS = {
+  'INTJ': { id:'jp', en:'JP', cn:'JP', color:'#6B3FA0', desc:'深謀遠慮的幕後策士。你擁有異於常人的戰略眼光，能在混亂中看清全局，為長遠目標佈局。你不追求鎂光燈，但你的每一個決定都將改寫結局。', traits:['戰略家','遠見','沉穩','獨立'], strong:'佈局深遠、冷靜自持、能在極端壓力下保持理性。', grow:'試著接納他人的即興創意，有時放手讓團隊自由發揮，會有意想不到的收穫。' },
+  'INTP': { id:'dhalsim', en:'DHALSIM', cn:'达尔西姆', color:'#D4872A', desc:'瑜伽哲人，以理性與靈性雙重維度理解世界。你不斷探索戰鬥與生命的本質，在孤獨的修行中淬煉出獨一無二的見解。你的智慧來自於永不停歇的思考。', traits:['哲學家','分析','內省','創造'], strong:'邏輯清晰、看透本質、不受常規束縛。', grow:'把想法付諸行動，別讓完美主義成為拖延的藉口。' },
+  'ENTJ': { id:'ken', en:'KEN', cn:'肯', color:'#E83030', desc:'天生的領袖與競爭者。你自信果斷，目標明確，永遠在追求更強的境界。你的熱情與魄力能點燃周圍的鬥志，帶領團隊衝破一切障礙。', traits:['領袖','果斷','競爭','熱情'], strong:'領導力強、行動迅速、逆境中越戰越勇。', grow:'聆聽他人的節奏，給隊友留出發揮空間，領袖不一定要永遠衝在最前面。' },
+  'ENTP': { id:'juri', en:'JURI', cn:'朱莉', color:'#D02090', desc:'反骨挑釁者，熱愛打破規則與常規。你的思維靈活跳脫，能在看似不可能的局面中找到破局之道。你享受對手的錯愕，因為你的存在本身就是對秩序的最大挑戰。', traits:['叛逆','機智','挑釁','靈活'], strong:'創意無限、反應敏捷、在混亂中如魚得水。', grow:'學習收斂鋒芒，真正的強者不需要時刻證明自己。' },
+  'INFJ': { id:'ryu', en:'RYU', cn:'隆', color:'#FFFFFF', desc:'追求武道真諦的孤高修行者。你擁有深邃的內在世界，對理想懷有近乎信仰般的執著。你不需要喧囂的掌聲，因為真正的戰鬥永遠發生在你與自己的內心之間。', traits:['修行者','理想','專注','自律'], strong:'意志堅定、心無旁騖、以不變應萬變。', grow:'偶爾停下來感受當下的溫暖，旅途中的人與風景同樣值得珍惜。' },
+  'INFP': { id:'lily', en:'LILY', cn:'莉莉', color:'#60C040', desc:'與自然共鳴的純真靈魂。你擁有豐沛的想像力與同理心，世界在你眼中充滿詩意與可能。你的力量來自於與天地萬物的連結，溫柔卻不可撼動。', traits:['純真','想像','同理','自然'], strong:'創造力豐沛、真誠待人、在混亂中保持本心。', grow:'學會保護自己，純真不代表可以被輕易踐踏，適時展現鋒芒。' },
+  'ENFJ': { id:'zangief', en:'ZANGIEF', cn:'桑吉夫', color:'#D82020', desc:'用鋼鐵肌肉守護信念的民族英雄。你天生具有感召力，總能激勵身邊的人突破極限。你的愛與熱血不只屬於自己，更屬於所有追隨你腳步的人。', traits:['感召','守護','熱血','英雄'], strong:'感染力強、忠誠可靠、將團隊凝聚成一股不可戰勝的力量。', grow:'接受自己的脆弱面，英雄不需要永遠無堅不摧。' },
+  'ENFP': { id:'kimberly', en:'KIMBERLY', cn:'金伯莉', color:'#E060A0', desc:'腦洞大開的忍者粉絲。你天馬行空的創意與無盡的好奇心，讓每一次對戰都變成一場驚喜派對。你用熱情感染世界，讓最嚴肅的戰鬥也充滿歡笑與色彩。', traits:['創意','熱情','好奇','活力'], strong:'想像力爆棚、善於連結人心、化平凡為驚奇。', grow:'練習聚焦，太多好點子同時進行反而會讓每個都只做到一半。' },
+  'ISTJ': { id:'guile', en:'GUILE', cn:'古烈', color:'#336699', desc:'鐵規則軍人，用紀律與責任感構築起堅不可摧的防線。你相信汗水與戰術的完美疊加，每一個微小的準備都在為最終勝利鋪路。你是團隊中最可靠的基石。', traits:['紀律','責任','可靠','務實'], strong:'執行力強、一絲不茍、能在極端壓力下維持穩定輸出。', grow:'學會變通，規則是用來服務目標而非束縛自己。' },
+  'ISFJ': { id:'chunli', en:'CHUN-LI', cn:'春丽', color:'#2060C0', desc:'守護正義的奉獻型警花。你擁有強大的責任感與保護欲，為所愛之人挺身而出是你最自然的反應。你的溫柔與強大從不矛盾，因為最堅韌的鋼也來自最細膩的淬煉。', traits:['守護','奉獻','正義','溫柔'], strong:'細心周全、忠誠可靠、對在乎的人事物願傾盡全力。', grow:'記得照顧自己，守護世界的前提是善待內心那個柔軟的自己。' },
+  'ESTJ': { id:'manon', en:'MANON', cn:'玛侬', color:'#C0A0E0', desc:'用優雅規則掌控全場的模特格鬥家。你相信秩序與美感可以共存，每一個動作都經過精心設計，簡單而致命。你用不容置疑的標準，定義了何謂真正的優雅與強大。', traits:['秩序','優雅','標準','掌控'], strong:'規劃力強、執行精準、以高標準鞭策自己與團隊。', grow:'允許混亂的存在，完美主義是把雙面刃，有時放鬆才能走得更遠。' },
+  'ESFJ': { id:'ehonda', en:'E. HONDA', cn:'本田', color:'#E8A020', desc:'傳統相撲的溫暖傳播者。你堅信透過自己的努力可以讓更多人感受到相撲的魅力。你的慷慨與熱情像一碗熱騰騰的拉麵，樸實卻能溫暖每個需要力量的人。', traits:['溫暖','傳統','慷慨','熱情'], strong:'人際連結強、樂於付出、以實際行動感染他人。', grow:'學習說不，無限付出會消耗自己，保留一些能量給最重要的事。' },
+  'ISTP': { id:'cammy', en:'CAMMY', cn:'嘉米', color:'#40B060', desc:'冷靜精準的特工殺手。你在瞬息萬變的戰場上總能找到最優解，用最少的動作達成最大的效果。沉默寡言只是表象，真正的你在每一次致命出擊中展現全部的專注與才華。', traits:['冷靜','精準','實戰','敏銳'], strong:'反應迅速、判斷準確、在危機中總能找到破綻。', grow:'多與他人交流，單打獨鬥固然高效，但有些問題需要團隊的智慧。' },
+  'ISFP': { id:'jamie', en:'JAMIE', cn:'杰米', color:'#E0A030', desc:'隨性灑脫的飲酒自由人。你活在此時此刻，不受任何規則框架的束縛。你的戰鬥如即興爵士，流暢而不可預測。你用最真實的自我面對世界，而世界也以自由回報你。', traits:['自由','隨性','藝術','灑脫'], strong:'適應力強、活在當下、以獨特風格打破僵局。', grow:'為重要的事情設定底線，自由不等於沒有責任。' },
+  'ESTP': { id:'luke', en:'LUKE', cn:'卢克', color:'#F07820', desc:'莽衝冒險的當代格鬥王。你天生熱愛刺激與挑戰，行動永遠快於思考，因為對你而言，直覺就是最好的戰術。你用拳頭說話，用行動證明，活在腎上腺素的每一次飆升之中。', traits:['冒險','直覺','行動','刺激'], strong:'膽識過人、反應迅捷、在實戰中越打越強。', grow:'停下來思考策略，衝動是雙面刃，有時備用計劃比蠻力更重要。' },
+  'ESFP': { id:'deejay', en:'DEE JAY', cn:'迪杰', color:'#F0C030', desc:'將戰場變成派對的音樂人。你擁有與生俱來的舞台魅力，每一次出場都是一場盛宴。你相信戰鬥也可以快樂，用節奏與笑容感染所有觀眾，連對手都不禁為你喝彩。', traits:['魅力','表演','樂觀','節奏'], strong:'感染力爆棚、享受當下、讓最艱難的戰鬥也充滿歡樂。', grow:'規劃未來，派對總會結束，為散場後的生活做好準備同樣重要。' }
+};
+
+// Compatibility mapping (who you get along with best)
+const COMPAT = {
+  'INTJ': ['ryu','chunli'],
+  'INTP': ['zangief','kimberly'],
+  'ENTJ': ['guile','cammy'],
+  'ENTP': ['lily','jamie'],
+  'INFJ': ['jp','dhalsim'],
+  'INFP': ['juri','luke'],
+  'ENFJ': ['ehonda','manon'],
+  'ENFP': ['dhalsim','deejay'],
+  'ISTJ': ['chunli','ryu'],
+  'ISFJ': ['guile','zangief'],
+  'ESTJ': ['cammy','ken'],
+  'ESFJ': ['luke','kimberly'],
+  'ISTP': ['jp','manon'],
+  'ISFP': ['juri','lily'],
+  'ESTP': ['deejay','jamie'],
+  'ESFP': ['ken','ehonda']
+};
+
+// Questions: 20 total, 5 per dimension
+const QUESTIONS = [
+  // Dimension 1: E (Extraversion) vs I (Introversion)
+  { dim:0, text:'在對戰結束後，你更傾向於？', opts:[
+    { text:'留在現場跟對手與觀眾交流互動，享受賽後氛圍', score:'E' },
+    { text:'一個人安靜地回看錄影，分析自己今天的表現', score:'I' }
+  ]},
+  { dim:0, text:'當你面對一個全新的格鬥流派時，你會？', opts:[
+    { text:'馬上找道館或社群，跟大家一起切磋學習', score:'E' },
+    { text:'獨自在訓練場反覆練習，直到掌握為止', score:'I' }
+  ]},
+  { dim:0, text:'大賽前一晚，你通常選擇？', opts:[
+    { text:'參加選手交流會，跟大家聊聊放鬆心情', score:'E' },
+    { text:'獨處冥想，排除一切外界干擾，專注於明天的戰鬥', score:'I' }
+  ]},
+  { dim:0, text:'你如何看待組隊對戰？', opts:[
+    { text:'太棒了，團隊的化學反應能創造意想不到的精彩', score:'E' },
+    { text:'打得來就組，但一個人的時候反而更能發揮真正實力', score:'I' }
+  ]},
+  { dim:0, text:'訓練時你比較偏好？', opts:[
+    { text:'熱鬧的健身房，各種聲音和氣氛讓你感到有動力', score:'E' },
+    { text:'安靜的山中道場，只有風和呼吸的陪伴', score:'I' }
+  ]},
+
+  // Dimension 2: S (Sensing) vs N (iNtuition)
+  { dim:1, text:'在分析對手弱點時，你的方法是？', opts:[
+    { text:'仔細觀察對方每一場錄影，捕捉具體的動作模式與習慣', score:'S' },
+    { text:'從對手的整體風格與氣場中，推測他的心理弱點與可能破綻', score:'N' }
+  ]},
+  { dim:1, text:'規劃一場重要賽事的訓練菜單時，你更看重？', opts:[
+    { text:'每天的具體訓練項目，按部就班逐步提升', score:'S' },
+    { text:'賽季的整體戰略方向，靈活調整細節以適應大局', score:'N' }
+  ]},
+  { dim:1, text:'在對戰中，你更信賴？', opts:[
+    { text:'千錘百鍊的肌肉記憶與實戰經驗', score:'S' },
+    { text:'當下直覺告訴你的那個決定性瞬間', score:'N' }
+  ]},
+  { dim:1, text:'當有人問你「你為什麼而戰」時，你的回答接近？', opts:[
+    { text:'因為這是我每天都在做的事，我享受進步的過程', score:'S' },
+    { text:'因為我想找到「最強」的真正意義，這是一場永恆的追問', score:'N' }
+  ]},
+  { dim:1, text:'你偏好學習新招式的方式是？', opts:[
+    { text:'看教學影片，一步一步模仿精確的動作', score:'S' },
+    { text:'先理解招式背後的理念與哲學，再從原理推導動作', score:'N' }
+  ]},
+
+  // Dimension 3: T (Thinking) vs F (Feeling)
+  { dim:2, text:'當你的訓練夥伴狀態低迷時，你會？', opts:[
+    { text:'直接指出問題所在，給出具體的改進方案', score:'T' },
+    { text:'先關心他的心理狀態，陪他一起找回節奏', score:'F' }
+  ]},
+  { dim:2, text:'比賽中對手明顯犯規但裁判沒看到，你會？', opts:[
+    { text:'冷靜應對，用實力證明犯規也贏不了你', score:'T' },
+    { text:'據理力爭，公平競技是格鬥的底線，不能就這樣算了', score:'F' }
+  ]},
+  { dim:2, text:'當一個強敵向你發出挑戰時，你最先想到的是？', opts:[
+    { text:'他的戰績數據和技術特點，我要如何破解', score:'T' },
+    { text:'這會是一場精彩的對決，勝負之外更有意義', score:'F' }
+  ]},
+  { dim:2, text:'你更欣賞怎樣的教練風格？', opts:[
+    { text:'嚴格、直接、不講情面，用最高標準逼出你的極限', score:'T' },
+    { text:'鼓勵、陪伴、理解每個人的節奏，相信成長需要時間', score:'F' }
+  ]},
+  { dim:2, text:'如果你輸了一場應該贏的比賽，你的反應是？', opts:[
+    { text:'逐幀分析失敗原因，制定防止重蹈覆轍的計劃', score:'T' },
+    { text:'允許自己難過一陣子，失敗帶來的遺憾也是成長的一部分', score:'F' }
+  ]},
+
+  // Dimension 4: J (Judging) vs P (Perceiving)
+  { dim:3, text:'你如何看待比賽日程的安排？', opts:[
+    { text:'提前規劃好整季的賽程，按部就班地執行', score:'J' },
+    { text:'留出彈性空間，隨時準備迎接意外的強敵', score:'P' }
+  ]},
+  { dim:3, text:'旅途中遇到計劃外的挑戰者時，你會？', opts:[
+    { text:'通常先婉拒，等完成當下目標後再回來接受挑戰', score:'J' },
+    { text:'這就是旅途的意義！計劃可以改，精彩的戰鬥不能錯過', score:'P' }
+  ]},
+  { dim:3, text:'在修行之路上，你更像哪種人？', opts:[
+    { text:'設定明確的階段目標，達成後再挑戰下一階段', score:'J' },
+    { text:'跟著感覺走，讓每一次相遇和戰鬥自然引導你的方向', score:'P' }
+  ]},
+  { dim:3, text:'你如何看待規則與規範？', opts:[
+    { text:'規則是競技的基礎，遵守規則才能公平地證明實力', score:'J' },
+    { text:'規則是框架，真正的強者往往是在框架邊緣找到突破', score:'P' }
+  ]},
+  { dim:3, text:'當你預感到一個難得的訓練機會來臨時，但你已經有其他安排？', opts:[
+    { text:'堅持原計劃，下一次機會一樣會來', score:'J' },
+    { text:'毫不猶豫放下一切，這樣的機會不會有第二次', score:'P' }
+  ]}
+];
+
+// ==================== STATE ====================
+let currentDim = 0;
+let currentQ = 0;
+let answers = {}; // key: question index, value: 'E'/'I' etc.
+const dimNames = ['ENERGY','NATURE','TACTICS','IDENTITY'];
+const dimPairs = [['E','I'],['S','N'],['T','F'],['J','P']];
+const dimLabels = ['外向 Extraversion / 內向 Introversion','實感 Sensing / 直覺 Intuition','思考 Thinking / 情感 Feeling','判斷 Judging / 感知 Perceiving'];
+
+// ==================== INIT ====================
+function init() {
+  buildCharGrid();
+}
+
+function buildCharGrid() {
+  const grid = document.getElementById('charGrid');
+  const entries = Object.entries(CHARACTERS);
+  grid.innerHTML = entries.map(([mbti, ch]) => `
+    <div class="char-card" onclick="alert('${ch.en} - ${mbti}\\n${ch.cn}')" style="background:${ch.color}10">
+      <img src="sf6-chars/${ch.id}.png" alt="${ch.en}" loading="lazy" onerror="this.style.display='none'">
+      <div class="char-label">${ch.en}<span class="char-cn">${ch.cn} · ${mbti}</span></div>
+    </div>
+  `).join('');
+}
+
+// ==================== TEST FLOW ====================
+function startTest() {
+  document.getElementById('home-section').style.display = 'none';
+  document.getElementById('characters-section').style.display = 'none';
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('test-section').classList.add('active');
+  currentDim = 0;
+  currentQ = 0;
+  answers = {};
+  buildDimTabs();
+  renderQuestion();
+  updateHUD();
+}
+
+function buildDimTabs() {
+  const container = document.getElementById('dimTabs');
+  container.innerHTML = dimNames.map((name, i) => `
+    <button class="dim-tab ${i === currentDim ? 'active' : ''}" onclick="switchDim(${i})">${name}</button>
+  `).join('');
+}
+
+function switchDim(dimIndex) {
+  // Only allow switching to completed dimensions or the current one
+  const dimStart = dimIndex * 5;
+  const allAnswered = QUESTIONS.slice(dimStart, dimStart + 5).every((_, i) => answers[dimStart + i] !== undefined);
+  if (dimIndex <= currentDim || allAnswered) {
+    currentDim = dimIndex;
+    currentQ = dimStart;
+    buildDimTabs();
+    renderQuestion();
+    updateHUD();
+  }
+}
+
+function renderQuestion() {
+  const container = document.getElementById('questionContainer');
+  const q = QUESTIONS[currentQ];
+  document.getElementById('dimLabel').textContent = `DIMENSION ${currentDim + 1}/4`;
+  document.getElementById('dimTitle').textContent = dimNames[currentDim];
+
+  container.innerHTML = `
+    <div class="question-block fade-in">
+      <div class="q-num">Q${currentQ + 1} · ${dimNames[currentDim]}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="options">
+        ${q.opts.map((opt, oi) => `
+          <button class="option-btn ${answers[currentQ] === opt.score ? 'selected' : ''}" onclick="selectAnswer('${opt.score}', this)">
+            <span class="opt-marker">${String.fromCharCode(65 + oi)}</span>
+            ${opt.text}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  document.getElementById('continueBtn').disabled = answers[currentQ] === undefined;
+}
+
+function selectAnswer(score, btn) {
+  answers[currentQ] = score;
+  document.getElementById('continueBtn').disabled = false;
+  // Update button styles
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function nextQuestion() {
+  if (currentQ < 19) {
+    currentQ++;
+    // Update currentDim
+    currentDim = Math.floor(currentQ / 5);
+    buildDimTabs();
+    renderQuestion();
+    updateHUD();
+  } else {
+    // Test complete
+    showResult();
+  }
+}
+
+function updateHUD() {
+  const answered = Object.keys(answers).length;
+  const pct = (answered / 20) * 100;
+  document.getElementById('hudFill').style.width = pct + '%';
+  document.getElementById('hudPercent').textContent = answered + '/20';
+}
+
+// ==================== RESULT ====================
+function showResult() {
+  document.getElementById('test-section').classList.remove('active');
+  document.getElementById('home-section').style.display = 'none';
+  document.getElementById('characters-section').style.display = 'none';
+
+  // Calculate MBTI
+  const mbti = dimPairs.map((pair, i) => {
+    let scoreA = 0, scoreB = 0;
+    for (let j = 0; j < 5; j++) {
+      const ans = answers[i * 5 + j];
+      if (ans === pair[0]) scoreA++;
+      else if (ans === pair[1]) scoreB++;
+    }
+    return { letter: scoreA >= scoreB ? pair[0] : pair[1], pct: scoreA >= scoreB ? (scoreA / 5 * 100) : (scoreB / 5 * 100), flipped: scoreB > scoreA };
+  });
+
+  const mbtiStr = mbti.map(d => d.letter).join('');
+  const ch = CHARACTERS[mbtiStr];
+  const compatChars = COMPAT[mbtiStr];
+
+  // Status bar percentages (based on personality traits)
+  const hpPct = Math.round(60 + (mbti[2].pct * 0.3) + (mbti[0].pct * 0.1));
+  const drivePct = Math.round(50 + (mbti[1].pct * 0.35) + (mbti[3].pct * 0.15));
+  const superPct = Math.round(40 + (mbti[1].pct * 0.4) + (mbti[2].pct * 0.2));
+
+  // Build result left
+  const leftEl = document.getElementById('resultLeft');
+  leftEl.innerHTML = `
+    <div class="result-mbti">${mbtiStr}</div>
+    <div class="result-name">${ch.en}</div>
+    <div class="result-cn">${ch.cn}</div>
+    <div class="status-bars">
+      <div class="status-row">
+        <span class="status-label">HP</span>
+        <div class="status-track"><div class="status-fill hp" style="width:${hpPct}%"></div></div>
+        <span style="font-family:var(--font-display);font-size:11px;color:#888;width:36px">${hpPct}%</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">DRIVE</span>
+        <div class="status-track"><div class="status-fill drive" style="width:${drivePct}%"></div></div>
+        <span style="font-family:var(--font-display);font-size:11px;color:#888;width:36px">${drivePct}%</span>
+      </div>
+      <div class="status-row">
+        <span class="status-label">SUPER</span>
+        <div class="status-track"><div class="status-fill super" style="width:${superPct}%"></div></div>
+        <span style="font-family:var(--font-display);font-size:11px;color:#888;width:36px">${superPct}%</span>
+      </div>
+    </div>
+    <div class="dim-analysis">
+      ${mbti.map((d, i) => {
+        const pair = dimPairs[i];
+        const names = [['外向','內向'],['實感','直覺'],['思考','情感'],['判斷','感知']];
+        return `
+          <div class="dim-row">
+            <span class="dim-pair left">${pair[0]}</span>
+            <div class="dim-bar-outer">
+              <div class="dim-bar-inner ${d.flipped ? 'right' : 'left'}" style="width:${d.flipped ? 100 - d.pct : d.pct}%"></div>
+            </div>
+            <span class="dim-pair right">${pair[1]}</span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <p class="result-desc">${ch.desc}</p>
+    <div class="result-traits">
+      ${ch.traits.map(t => `<span class="trait-tag">${t}</span>`).join('')}
+    </div>
+    <div class="compat-section">
+      <div class="compat-title">最佳搭檔</div>
+      <div class="compat-chars">
+        ${compatChars.map(cid => {
+          const cobj = Object.values(CHARACTERS).find(c => c.id === cid);
+          return cobj ? `<div class="compat-chip"><img src="sf6-chars/${cid}.png" alt="${cobj.en}" onerror="this.style.display='none'"><span>${cobj.en}</span></div>` : '';
+        }).join('')}
+      </div>
+    </div>
+    <div style="margin-top:8px; font-size:13px; color:#888">
+      <p><strong style="color:var(--sf6-green)">優勢：</strong>${ch.strong}</p>
+      <p style="margin-top:4px"><strong style="color:var(--sf6-orange)">成長：</strong>${ch.grow}</p>
+    </div>
+    <div class="result-actions" style="margin-top:24px">
+      <button class="r-btn primary" onclick="shareResult('${mbtiStr}')">分享結果</button>
+      <button class="r-btn secondary" onclick="retakeTest()">重新測試</button>
+    </div>
+  `;
+
+  // Build result right (character art)
+  const rightEl = document.getElementById('resultRight');
+  rightEl.innerHTML = `<img src="sf6-chars/${ch.id}.png" alt="${ch.en}" onerror="this.src='data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27600%27><rect fill=%27%23${ch.color.replace("#","")}30%27 width=%27400%27 height=%27600%27/></svg>'">`;
+  rightEl.style.background = `radial-gradient(ellipse at center, ${ch.color}15 0%, transparent 70%)`;
+
+  document.getElementById('result-section').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Delayed status bar animation
+  setTimeout(() => {
+    document.querySelectorAll('.status-fill').forEach(el => {
+      el.style.width = el.style.width; // force reflow
+    });
+  }, 100);
+}
+
+function shareResult(mbtiStr) {
+  const ch = CHARACTERS[mbtiStr];
+  const text = `🕹️ STREET FIGHTER 6 人格診斷\n\n我的格鬥人格：${mbtiStr}\n對應角色：${ch.en}（${ch.cn}）\n\n${ch.desc}\n\n快來測試你的格鬥人格！`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => alert('已複製結果到剪貼簿！'));
+  } else {
+    prompt('複製以下文字分享：', text);
+  }
+}
+
+function retakeTest() {
+  document.getElementById('result-section').classList.remove('active');
+  document.getElementById('home-section').style.display = 'flex';
+  document.getElementById('characters-section').style.display = 'block';
+  answers = {};
+  currentDim = 0;
+  currentQ = 0;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ==================== NAVIGATION ====================
+document.querySelectorAll('.sf6-nav a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const nav = link.dataset.nav;
+    document.querySelectorAll('.sf6-nav a').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    if (nav === 'home') {
+      document.getElementById('home-section').style.display = 'flex';
+      document.getElementById('characters-section').style.display = 'block';
+      document.getElementById('test-section').classList.remove('active');
+      document.getElementById('result-section').classList.remove('active');
+    } else if (nav === 'characters') {
+      document.getElementById('home-section').style.display = 'none';
+      document.getElementById('characters-section').style.display = 'block';
+      document.getElementById('test-section').classList.remove('active');
+      document.getElementById('result-section').classList.remove('active');
+    } else if (nav === 'test') {
+      startTest();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// Initialize
+init();
+</script>
+</body>
+</html>
