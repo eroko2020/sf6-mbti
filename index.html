@@ -760,6 +760,23 @@ const QUESTIONS = [
 ];
 
 // ============================================================
+// 预计算：每题每角色的最佳选项（点乘最高）
+// ============================================================
+const bestOptPerQ = QUESTIONS.map(q => {
+  const m = {};
+  CHARS.forEach(c => {
+    let bestIdx = 0, bestDot = -Infinity;
+    q.opts.forEach((opt, oi) => {
+      let dot = 0;
+      for (let d = 0; d < 8; d++) dot += opt.w[d] * c.vector[d];
+      if (dot > bestDot) { bestDot = dot; bestIdx = oi; }
+    });
+    m[c.id] = bestIdx;
+  });
+  return m;
+});
+
+// ============================================================
 // 状态
 // ============================================================
 let answers = new Array(QUESTIONS.length).fill(null);
@@ -873,41 +890,28 @@ function prevQ() {
 // 解决之前“总是 E.HONDA”的 bug
 // ============================================================
 function showResult() {
-  // 1. 累积用户答案向量（加总所有选项权重）
-  const userVec = [0,0,0,0,0,0,0,0];
+  // 新算法：角色-问题匹配得分
+  // 每道题，若用户答案 == 某角色的最佳选项，该角色+1分
+  const scores = {};
+  CHARS.forEach(c => { scores[c.id] = 0; });
   answers.forEach((ans, qi) => {
     if (ans === null) return;
-    QUESTIONS[qi].opts[ans].w.forEach((w, dim) => { userVec[dim] += w; });
+    CHARS.forEach(c => {
+      if (bestOptPerQ[qi][c.id] === ans) {
+        scores[c.id]++;
+      }
+    });
   });
-
-  // 2. 计算每个角色的余弦相似度
-  const normUser = Math.sqrt(userVec.reduce((s,v)=>s+v*v,0)) || 1;
-  const scores = CHARS.map(c => {
-    let dot = 0, normChar = 0;
-    for (let d = 0; d < 8; d++) {
-      dot += userVec[d] * c.vector[d];
-      normChar += c.vector[d] * c.vector[d];
-    }
-    normChar = Math.sqrt(normChar) || 1;
-    const sim = dot / (normUser * normChar); // -1 ~ 1
-    return { char:c, sim:sim };
-  });
-
-  // 3. 排序
-  scores.sort((a,b) => b.sim - a.sim);
-  const top = scores[0].char;
-  const similar = scores.slice(1,13); // 取top2-13
-
-  // 4. 计算百分比（转化为更直观的 0-100%）
-  const maxSim = scores[0].sim;
-  const minSim = scores[scores.length-1].sim;
-  const range = maxSim - minSim || 1;
+  // 排序
+  const sorted = CHARS.map(c => ({char:c, score:scores[c.id]})).sort((a,b)=>b.score-a.score);
+  const top = sorted[0].char;
+  const similar = sorted.slice(1,7); // top2-7
+  // 计算百分比
   const pcts = {};
-  scores.forEach(s => {
-    pcts[s.char.id] = Math.round(((s.sim - minSim) / range) * 100);
+  sorted.forEach((s, i) => {
+    pcts[s.char.id] = Math.round(Math.max(0, 100 - i * 3.3));
   });
-
-  renderResult(top, similar.slice(0,6), pcts);
+  renderResult(top, similar, pcts);
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('result-screen').classList.add('active');
   document.getElementById('result-screen').scrollIntoView({behavior:'smooth',block:'start'});
