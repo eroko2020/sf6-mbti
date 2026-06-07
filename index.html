@@ -1,1143 +1,1001 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STREET FIGHTER 6 | 人格診斷</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<title>SF6 人格测试 — 你是哪位格斗家？</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --sf6-orange: #FF5F00;
-  --sf6-orange-dark: #CC4C00;
-  --sf6-yellow: #FFD700;
-  --sf6-blue: #00A8E8;
-  --sf6-dark: #0a0a0a;
-  --sf6-darker: #050505;
-  --sf6-gray: #1a1a1a;
-  --sf6-gray-light: #2a2a2a;
-  --sf6-white: #f0f0f0;
-  --sf6-red: #E02020;
-  --sf6-green: #20C040;
-  --font-display: 'Barlow Condensed', 'Noto Sans TC', sans-serif;
-  --font-body: 'Noto Sans TC', sans-serif;
+:root{
+  --purple:#8e44ad; --purple-light:#a55fc1; --purple-dark:#5c2d82;
+  --black:#050508; --surface:#0c0c14; --card:#12121e;
+  --border:#1e1e32; --border-active:#3d2560;
+  --text:#d8d8e8; --muted:#6b6b82; --white:#f0f0f8;
+  --accent:#ff6b2b;
 }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:'Noto Sans TC',sans-serif;min-height:100vh;overflow-x:hidden}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* NAV */
+nav{background:rgba(5,5,8,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;height:52px;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+nav .logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.12em;color:var(--white)}
+nav .logo span{color:var(--purple-light)}
+nav .sub{margin-left:1rem;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
 
-body {
-  background: var(--sf6-darker);
-  color: var(--sf6-white);
-  font-family: var(--font-body);
-  overflow-x: hidden;
-  min-height: 100vh;
-}
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block}
 
-/* ===== NAVIGATION BAR ===== */
-.sf6-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: 56px;
-  background: rgba(5,5,5,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 2px solid var(--sf6-orange);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-}
-.sf6-nav .logo {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--sf6-orange);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-.sf6-nav .logo span { color: var(--sf6-white); }
-.sf6-nav .nav-links {
-  display: flex;
-  gap: 28px;
-}
-.sf6-nav .nav-links a {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--sf6-white);
-  text-decoration: none;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  transition: color 0.2s;
-}
-.sf6-nav .nav-links a:hover, .sf6-nav .nav-links a.active { color: var(--sf6-orange); }
+/* HERO */
+#hero-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;overflow:hidden}
+#hero-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(142,68,173,.08) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(142,68,173,.04) 0%,transparent 50%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='%23ffffff04' stroke-width='1'/%3E%3C/svg%3E");pointer-events:none}
+.hero-tag{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.35em;color:var(--purple-light);text-transform:uppercase;margin-bottom:1rem;border:1px solid var(--purple);display:inline-block;padding:.25rem 1rem;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
+#hero-screen h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(3rem,10vw,7rem);line-height:.92;text-transform:uppercase;letter-spacing:.03em;color:var(--white)}
+#hero-screen h1 em{color:var(--purple-light);font-style:normal}
+#hero-screen .subtitle{margin-top:1.2rem;font-size:1rem;color:var(--muted);max-width:480px;line-height:1.7}
+.sf-btn{display:inline-block;margin-top:2rem;background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:var(--white);font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;padding:.8rem 2.6rem;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);cursor:pointer;border:none;transition:transform .15s,filter .15s,box-shadow .15s}
+.sf-btn:hover{transform:scale(1.03);filter:brightness(1.2);box-shadow:0 0 30px rgba(142,68,173,.3)}
+.sf-btn.secondary{background:transparent;border:2px solid var(--purple);color:var(--purple-light)}
+.sf-btn.secondary:hover{box-shadow:0 0 20px rgba(142,68,173,.2)}
+.sf-btn:active{transform:scale(.98)}
 
-/* ===== HERO SECTION ===== */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 100px 24px 80px;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at center, rgba(255,95,0,0.08) 0%, transparent 70%);
-  z-index: 0;
-}
-.hero .hero-tag {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: var(--sf6-orange);
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
-}
-.hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 10vw, 120px);
-  font-weight: 900;
-  line-height: 0.9;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  position: relative;
-  z-index: 1;
-}
-.hero h1 .line1 { display: block; color: var(--sf6-white); }
-.hero h1 .line2 {
-  display: block;
-  color: var(--sf6-orange);
-  text-shadow: 4px 4px 0 rgba(0,0,0,0.5), -2px -2px 0 rgba(0,0,0,0.3);
-}
-.hero .hero-sub {
-  font-size: 16px;
-  color: #999;
-  margin-top: 24px;
-  max-width: 500px;
-  line-height: 1.7;
-  position: relative;
-  z-index: 1;
-}
-.hero .hero-btn {
-  display: inline-block;
-  margin-top: 40px;
-  padding: 16px 48px;
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--sf6-white);
-  background: var(--sf6-orange);
-  border: none;
-  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-  z-index: 1;
-}
-.hero .hero-btn:hover {
-  background: #FF7F2A;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255,95,0,0.4);
-}
+.char-counter{font-family:'Barlow Condensed',sans-serif;font-size:.85rem;color:var(--muted);letter-spacing:.15em;margin-top:2rem}
 
-/* ===== CHARACTER SELECT GRID ===== */
-.char-grid-section {
-  padding: 40px 24px 80px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.char-grid-title {
-  font-family: var(--font-display);
-  font-size: 36px;
-  font-weight: 900;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  text-align: center;
-  margin-bottom: 8px;
-  color: var(--sf6-white);
-}
-.char-grid-sub {
-  text-align: center;
-  color: #777;
-  font-size: 14px;
-  margin-bottom: 40px;
-}
-.char-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 4px;
-}
-.char-card {
-  position: relative;
-  aspect-ratio: 3/4;
-  overflow: hidden;
-  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-  background: var(--sf6-gray);
-  border: 1px solid #222;
-}
-.char-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(255,95,0,0.3);
-  z-index: 10;
-}
-.char-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  transition: transform 0.4s;
-}
-.char-card:hover img { transform: scale(1.05); }
-.char-card .char-label {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 12px 8px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.9));
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--sf6-white);
-  text-align: center;
-}
-.char-card .char-cn {
-  font-size: 11px;
-  font-weight: 400;
-  color: #999;
-  display: block;
-  margin-top: 2px;
-}
+/* QUIZ */
+#quiz-screen{padding:2rem 1rem 4rem;min-height:100vh}
+.quiz-wrap{max-width:680px;margin:0 auto}
 
-/* ===== TEST INTERFACE ===== */
-.test-section {
-  display: none;
-  min-height: 100vh;
-  padding: 100px 24px 80px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-.test-section.active { display: block; }
+/* Progress */
+.progress-area{margin-bottom:2rem}
+.prog-top{display:flex;justify-content:space-between;align-items:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem}
+.prog-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--purple-light));transition:width .4s ease;border-radius:2px}
+.prog-dots{display:flex;gap:3px;margin-top:.5rem;flex-wrap:wrap}
+.prog-dot{width:8px;height:8px;background:var(--border);border-radius:50%;transition:background .3s}
+.prog-dot.done{background:var(--purple)}
+.prog-dot.current{background:var(--purple-light);box-shadow:0 0 6px rgba(142,68,173,.6)}
 
-.test-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-.test-header .dim-label {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: var(--sf6-orange);
-  text-transform: uppercase;
-}
-.test-header h2 {
-  font-family: var(--font-display);
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin: 8px 0;
-}
+/* Question */
+.q-cat{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:.25em;color:var(--purple-light);text-transform:uppercase;margin-bottom:.5rem}
+.q-box{background:var(--card);border:1px solid var(--border);border-radius:2px;padding:1.5rem 1.8rem;position:relative;overflow:hidden;margin-bottom:1rem}
+.q-box::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--purple),transparent 70%)}
+.q-box h2{font-size:1.1rem;line-height:1.6;color:var(--white);font-weight:500;position:relative;z-index:1}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:3.5rem;font-weight:900;color:rgba(142,68,173,.08);line-height:1;position:absolute;right:.5rem;top:.3rem;pointer-events:none}
 
-/* HUD Progress Bar */
-.hud-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-  padding: 0 8px;
-}
-.hud-bar .hud-label {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #888;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.hud-bar .hud-track {
-  flex: 1;
-  height: 8px;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  overflow: hidden;
-}
-.hud-bar .hud-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--sf6-green), #40E060);
-  transition: width 0.5s ease;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-}
+/* Options */
+.options{display:grid;gap:.5rem}
+.opt{background:var(--surface);border:1px solid var(--border);padding:.85rem 1rem;cursor:pointer;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);display:flex;align-items:center;gap:.8rem;transition:border-color .2s,background .2s,transform .1s}
+.opt:hover{border-color:var(--purple);background:#16162a}
+.opt.selected{border-color:var(--purple-light);background:rgba(142,68,173,.1)}
+.opt:active{transform:scale(.99)}
+.opt-letter{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--purple-light);min-width:20px;text-align:center}
+.opt-text{font-size:.9rem;line-height:1.4;color:#ccc}
 
-/* Dimension Tabs */
-.dim-tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.dim-tab {
-  padding: 8px 20px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #666;
-  background: transparent;
-  border: 1px solid #333;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-  cursor: pointer;
-  transition: all 0.3s;
-  white-space: nowrap;
-}
-.dim-tab:hover { color: #aaa; border-color: #555; }
-.dim-tab.active {
-  color: var(--sf6-white);
-  background: var(--sf6-orange);
-  border-color: var(--sf6-orange);
-}
+/* Nav */
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;gap:.8rem}
 
-/* Questions */
-.question-block {
-  margin-bottom: 32px;
-  padding: 24px;
-  background: var(--sf6-gray);
-  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
-  border: 1px solid #222;
-}
-.question-block .q-num {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: var(--sf6-orange);
-  margin-bottom: 12px;
-}
-.question-block .q-text {
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 1.6;
-  color: var(--sf6-white);
-  margin-bottom: 20px;
-}
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.option-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
-  background: var(--sf6-dark);
-  border: 1px solid #2a2a2a;
-  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-  cursor: pointer;
-  transition: all 0.25s;
-  text-align: left;
-  font-family: var(--font-body);
-  font-size: 15px;
-  color: #ccc;
-}
-.option-btn:hover {
-  border-color: var(--sf6-orange);
-  color: var(--sf6-white);
-  background: #111;
-}
-.option-btn.selected {
-  border-color: var(--sf6-orange);
-  background: rgba(255,95,0,0.12);
-  color: var(--sf6-white);
-}
-.option-btn .opt-marker {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 900;
-  color: #444;
-  background: #111;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-  flex-shrink: 0;
-  transition: all 0.25s;
-}
-.option-btn.selected .opt-marker {
-  color: var(--sf6-orange);
-  background: rgba(255,95,0,0.2);
-}
+/* RESULT ────────────────────────────────── */
+#result-screen{min-height:100vh}
+.result-hero{position:relative;display:flex;min-height:100vh;overflow:hidden}
+.result-bg{position:absolute;inset:0;z-index:0}
+.result-bg .grad{position:absolute;inset:0;transition:all .8s}
+.result-bg .grid{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h40v40H0z' fill='none' stroke='%23ffffff04' stroke-width='1'/%3E%3C/svg%3E")}
 
-.continue-btn {
-  display: block;
-  width: 100%;
-  max-width: 300px;
-  margin: 40px auto 0;
-  padding: 16px;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--sf6-white);
-  background: var(--sf6-orange);
-  border: none;
-  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.continue-btn:hover:not(:disabled) {
-  background: #FF7F2A;
-  box-shadow: 0 8px 24px rgba(255,95,0,0.4);
-}
-.continue-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
+.result-img-col{position:relative;z-index:1;flex:0 0 45%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.result-img-col img{max-height:92vh;max-width:100%;object-fit:contain;filter:drop-shadow(0 0 80px rgba(0,0,0,.9));animation:charSlide .7s ease}
+.result-img-col .result-emoji-fallback{width:100%;height:80vh;display:none;align-items:center;justify-content:center;font-size:6rem;opacity:.25}
+@keyframes charSlide{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
 
-/* ===== RESULT SECTION ===== */
-.result-section {
-  display: none;
-  min-height: 100vh;
-}
-.result-section.active { display: block; }
+.result-info-col{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center;padding:3rem 2.5rem}
 
-.result-hero {
-  display: flex;
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-.result-left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 80px 40px 80px 60px;
-  z-index: 2;
-}
-.result-right {
-  flex: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.result-right img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center bottom;
-  animation: charSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 0 40px rgba(0,0,0,0.5));
-}
-@keyframes charSlideIn {
-  from { opacity: 0; transform: translateX(60px) scale(0.9); }
-  to { opacity: 1; transform: translateX(0) scale(1); }
-}
-.result-right::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 30%;
-  background: linear-gradient(transparent, var(--sf6-darker));
-  pointer-events: none;
-}
+.result-tag{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:.35em;color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:.4rem}
+.result-type{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.9rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.2rem}
+.result-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(3rem,7vw,5.5rem);line-height:.88;text-transform:uppercase;color:var(--white);margin-bottom:.2rem}
+.result-name-cn{font-size:1rem;color:rgba(255,255,255,.5);margin-bottom:1rem;font-weight:400}
+.result-tagline{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.08em;border-left:3px solid var(--purple-light);padding-left:.8rem;margin-bottom:1rem}
+.result-desc{font-size:.9rem;line-height:1.7;color:rgba(255,255,255,.65);max-width:500px;margin-bottom:.6rem}
+.result-meme{font-size:.82rem;line-height:1.6;color:rgba(255,255,255,.4);font-style:italic;max-width:500px;margin-bottom:1.5rem;padding:.5rem .8rem;border:1px dashed rgba(255,255,255,.1);border-radius:2px}
 
-.result-mbti {
-  font-family: var(--font-display);
-  font-size: clamp(64px, 12vw, 140px);
-  font-weight: 900;
-  line-height: 0.85;
-  letter-spacing: 2px;
-  color: var(--sf6-white);
-  text-shadow: 6px 6px 0 var(--sf6-orange);
-  margin-bottom: 8px;
-}
-.result-name {
-  font-family: var(--font-display);
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--sf6-orange);
-  margin-bottom: 6px;
-}
-.result-cn {
-  font-size: 18px;
-  color: #999;
-  margin-bottom: 24px;
-}
+/* Traits */
+.trait-bars{margin-bottom:1.5rem}
+.trait-row{margin-bottom:.6rem}
+.trait-label{display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.25rem}
+.trait-track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.trait-fill{height:100%;transition:width 1s .3s;border-radius:2px}
 
-/* Status Bars */
-.status-bars { margin-bottom: 32px; }
-.status-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.status-label {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #888;
-  width: 70px;
-  text-align: right;
-}
-.status-track {
-  flex: 1;
-  height: 6px;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-  overflow: hidden;
-}
-.status-fill {
-  height: 100%;
-  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.status-fill.hp { background: linear-gradient(90deg, #20C040, #40E060); }
-.status-fill.drive { background: linear-gradient(90deg, #FF5F00, #FF8F3F); }
-.status-fill.super { background: linear-gradient(90deg, #00A8E8, #40C8FF); }
+.strengths{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.str-tag{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .7rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%)}
 
-/* Dimension Analysis */
-.dim-analysis { margin-bottom: 28px; }
-.dim-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-  font-size: 13px;
-}
-.dim-pair {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 1px;
-  width: 50px;
-  text-align: center;
-  font-size: 14px;
-}
-.dim-pair.left { color: #ccc; text-align: right; }
-.dim-pair.right { color: #ccc; text-align: left; }
-.dim-bar-outer {
-  flex: 1;
-  height: 18px;
-  background: #111;
-  border: 1px solid #222;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-  overflow: hidden;
-  display: flex;
-}
-.dim-bar-inner {
-  height: 100%;
-  transition: width 0.8s ease;
-}
-.dim-bar-inner.left { background: var(--sf6-orange); }
-.dim-bar-inner.right { background: var(--sf6-blue); margin-left: auto; }
+.result-btns{display:flex;gap:.8rem;flex-wrap:wrap}
 
-/* Description */
-.result-desc {
-  font-size: 15px;
-  line-height: 1.8;
-  color: #bbb;
-  margin-bottom: 20px;
-}
-.result-traits {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-.trait-tag {
-  padding: 6px 14px;
-  font-size: 12px;
-  border: 1px solid #333;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-  color: #aaa;
-}
+/* Match section */
+.match-section{padding:2.5rem 1.5rem;background:var(--surface);border-top:1px solid var(--border)}
+.match-section h3{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.2rem;letter-spacing:.15em;text-transform:uppercase;color:var(--purple-light);margin-bottom:1.2rem}
+.match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.8rem}
+.match-card{background:var(--card);border:1px solid var(--border);padding:.8rem .6rem;text-align:center;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);cursor:pointer;transition:border-color .2s,background .2s}
+.match-card:hover{border-color:var(--purple-light);background:#1a1a28}
+.match-card img{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.match-card .mc-name{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#ccc;margin-top:.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.match-card .mc-pct{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--purple-light)}
 
-/* Compatible characters */
-.compat-section { margin-bottom: 24px; }
-.compat-title {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  color: #888;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.compat-chars {
-  display: flex;
-  gap: 8px;
-}
-.compat-chip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: #111;
-  border: 1px solid #2a2a2a;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
-}
-.compat-chip img {
-  width: 32px;
-  height: 32px;
-  object-fit: cover;
-  object-position: top;
-  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
-}
-.compat-chip span {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+/* ANIM */
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fade-in{animation:fadeIn .45s ease}
 
-/* Action buttons */
-.result-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.r-btn {
-  padding: 12px 28px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.r-btn.primary {
-  color: var(--sf6-white);
-  background: var(--sf6-orange);
-  border: none;
-  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-}
-.r-btn.primary:hover { background: #FF7F2A; }
-.r-btn.secondary {
-  color: #ccc;
-  background: transparent;
-  border: 1px solid #444;
-  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
-}
-.r-btn.secondary:hover { border-color: var(--sf6-orange); color: var(--sf6-orange); }
-
-/* ===== FOOTER ===== */
-.sf6-footer {
-  text-align: center;
-  padding: 24px;
-  border-top: 1px solid #1a1a1a;
-  color: #444;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-
-/* ===== ANIMATIONS ===== */
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .result-hero { flex-direction: column; }
-  .result-left { padding: 40px 20px; order: 2; }
-  .result-right { flex: none; height: 50vh; order: 1; }
-  .result-mbti { font-size: clamp(40px, 16vw, 100px); }
-  .sf6-nav { padding: 0 12px; }
-  .sf6-nav .nav-links { display: none; }
-  .char-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-  .test-section { padding: 90px 16px 40px; }
-  .dim-tabs { gap: 4px; }
-  .dim-tab { padding: 6px 12px; font-size: 12px; letter-spacing: 1px; }
-  .option-btn { padding: 12px 14px; font-size: 14px; }
+/* MOBILE */
+@media(max-width:768px){
+  .result-hero{flex-direction:column}
+  .result-img-col{flex:none;height:50vh;min-height:240px;max-height:50vh}
+  .result-img-col img{max-height:48vh;position:absolute;bottom:0}
+  .result-info-col{padding:1.5rem}
+  .result-name{font-size:2.5rem}
+  nav .sub{display:none}
+  .match-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
 }
 </style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
-<nav class="sf6-nav">
-  <div class="logo">SF<span>6</span></div>
-  <div class="nav-links">
-    <a href="#" class="active" data-nav="home">HOME</a>
-    <a href="#" data-nav="test">TEST</a>
-    <a href="#" data-nav="characters">CHARACTERS</a>
-  </div>
+<nav>
+  <div class="logo">STREET<span>FIGHTER</span> 6</div>
+  <div class="sub">/ 人格测试</div>
 </nav>
 
-<!-- HERO / HOME -->
-<section class="hero" id="home-section">
-  <div class="hero-tag">PERSONALITY DIAGNOSIS</div>
-  <h1>
-    <span class="line1">WHAT'S YOUR</span>
-    <span class="line2">FIGHTING STYLE?</span>
-  </h1>
-  <p class="hero-sub">
-    透過 20 道情境式問答，找出你在《Street Fighter 6》中最匹配的格鬥家。每個選擇，都揭示你內心深處的戰鬥本能。
-  </p>
-  <button class="hero-btn" onclick="startTest()">START TEST</button>
+<!-- HERO -->
+<section id="hero-screen" class="screen active">
+  <div style="position:relative;z-index:1">
+    <div class="hero-tag">PERSONALITY TEST</div>
+    <h1>你是哪位<br><em>格斗家？</em></h1>
+    <p class="subtitle">
+      20 道街头快问，看看你的格斗灵魂。<br>
+      30 位格斗家，一题见真章。
+    </p>
+    <button class="sf-btn" onclick="startQuiz()">开始测试</button>
+    <div class="char-counter">30 FIGHTERS · STREET FIGHTER 6</div>
+  </div>
 </section>
 
-<!-- CHARACTER GRID -->
-<section class="char-grid-section" id="characters-section">
-  <div class="char-grid-title">CHARACTER SELECT</div>
-  <div class="char-grid-sub">點擊角色檢視其 MBTI 對應</div>
-  <div class="char-grid" id="charGrid"></div>
+<!-- QUIZ -->
+<section id="quiz-screen" class="screen">
+  <div class="quiz-wrap">
+    <div class="progress-area">
+      <div class="prog-top">
+        <span id="cat-label">—</span>
+        <span id="q-counter">0 / 20</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-dots" id="prog-dots"></div>
+    </div>
+    <div class="q-box fade-in" id="q-box">
+      <div class="q-cat" id="q-cat"></div>
+      <h2 id="q-text"></h2>
+      <div class="q-num" id="q-num"></div>
+    </div>
+    <div class="options" id="options"></div>
+    <div class="q-nav">
+      <button class="sf-btn secondary" id="btn-prev" onclick="prevQ()" style="visibility:hidden">← 上一题</button>
+      <button class="sf-btn" id="btn-next" onclick="nextQ()">下一题 →</button>
+    </div>
+  </div>
 </section>
 
-<!-- TEST SECTION -->
-<section class="test-section" id="test-section">
-  <div class="test-header">
-    <div class="dim-label" id="dimLabel">DIMENSION 1/4</div>
-    <h2 id="dimTitle">ENERGY</h2>
+<!-- RESULT -->
+<section id="result-screen" class="screen">
+  <div class="result-hero" id="result-hero">
+    <div class="result-bg">
+      <div class="grad" id="result-gradient"></div>
+      <div class="grid"></div>
+    </div>
+    <div class="result-img-col">
+      <img id="result-img" src="" alt="" style="display:none">
+      <div id="result-emoji-fb" class="result-emoji-fallback"></div>
+    </div>
+    <div class="result-info-col">
+      <div class="result-tag">YOUR FIGHTER PERSONA</div>
+      <div class="result-type" id="result-type"></div>
+      <div class="result-name" id="result-name"></div>
+      <div class="result-name-cn" id="result-name-cn"></div>
+      <div class="result-tagline" id="result-tagline"></div>
+      <div class="result-desc" id="result-desc"></div>
+      <div class="result-meme" id="result-meme"></div>
+      <div class="trait-bars" id="trait-bars"></div>
+      <div class="strengths" id="result-strengths"></div>
+      <div class="result-btns">
+        <button class="sf-btn" onclick="shareResult()">分享结果</button>
+        <button class="sf-btn secondary" onclick="restartQuiz()">重新测试</button>
+      </div>
+    </div>
   </div>
-  <div class="hud-bar">
-    <span class="hud-label">PROGRESS</span>
-    <div class="hud-track"><div class="hud-fill" id="hudFill" style="width:0%"></div></div>
-    <span style="font-family:var(--font-display);font-size:12px;font-weight:700;color:#888" id="hudPercent">0/20</span>
+  <div class="match-section">
+    <h3>其他相似人格</h3>
+    <div class="match-grid" id="match-grid"></div>
   </div>
-  <div class="dim-tabs" id="dimTabs"></div>
-  <div id="questionContainer"></div>
-  <button class="continue-btn" id="continueBtn" disabled onclick="nextQuestion()">NEXT</button>
-</section>
-
-<!-- RESULT SECTION -->
-<section class="result-section" id="result-section">
-  <div class="result-hero" id="resultHero">
-    <div class="result-left" id="resultLeft"></div>
-    <div class="result-right" id="resultRight"></div>
-  </div>
-  <div class="sf6-footer">©CAPCOM  STREET FIGHTER 6  PERSONALITY DIAGNOSIS</div>
 </section>
 
 <script>
-// ==================== DATA ====================
-
-// Character data with MBTI mapping and theme colors
-const CHARACTERS = {
-  'INTJ': { id:'jp', en:'JP', cn:'JP', color:'#6B3FA0', desc:'深謀遠慮的幕後策士。你擁有異於常人的戰略眼光，能在混亂中看清全局，為長遠目標佈局。你不追求鎂光燈，但你的每一個決定都將改寫結局。', traits:['戰略家','遠見','沉穩','獨立'], strong:'佈局深遠、冷靜自持、能在極端壓力下保持理性。', grow:'試著接納他人的即興創意，有時放手讓團隊自由發揮，會有意想不到的收穫。' },
-  'INTP': { id:'dhalsim', en:'DHALSIM', cn:'达尔西姆', color:'#D4872A', desc:'瑜伽哲人，以理性與靈性雙重維度理解世界。你不斷探索戰鬥與生命的本質，在孤獨的修行中淬煉出獨一無二的見解。你的智慧來自於永不停歇的思考。', traits:['哲學家','分析','內省','創造'], strong:'邏輯清晰、看透本質、不受常規束縛。', grow:'把想法付諸行動，別讓完美主義成為拖延的藉口。' },
-  'ENTJ': { id:'ken', en:'KEN', cn:'肯', color:'#E83030', desc:'天生的領袖與競爭者。你自信果斷，目標明確，永遠在追求更強的境界。你的熱情與魄力能點燃周圍的鬥志，帶領團隊衝破一切障礙。', traits:['領袖','果斷','競爭','熱情'], strong:'領導力強、行動迅速、逆境中越戰越勇。', grow:'聆聽他人的節奏，給隊友留出發揮空間，領袖不一定要永遠衝在最前面。' },
-  'ENTP': { id:'juri', en:'JURI', cn:'朱莉', color:'#D02090', desc:'反骨挑釁者，熱愛打破規則與常規。你的思維靈活跳脫，能在看似不可能的局面中找到破局之道。你享受對手的錯愕，因為你的存在本身就是對秩序的最大挑戰。', traits:['叛逆','機智','挑釁','靈活'], strong:'創意無限、反應敏捷、在混亂中如魚得水。', grow:'學習收斂鋒芒，真正的強者不需要時刻證明自己。' },
-  'INFJ': { id:'ryu', en:'RYU', cn:'隆', color:'#FFFFFF', desc:'追求武道真諦的孤高修行者。你擁有深邃的內在世界，對理想懷有近乎信仰般的執著。你不需要喧囂的掌聲，因為真正的戰鬥永遠發生在你與自己的內心之間。', traits:['修行者','理想','專注','自律'], strong:'意志堅定、心無旁騖、以不變應萬變。', grow:'偶爾停下來感受當下的溫暖，旅途中的人與風景同樣值得珍惜。' },
-  'INFP': { id:'lily', en:'LILY', cn:'莉莉', color:'#60C040', desc:'與自然共鳴的純真靈魂。你擁有豐沛的想像力與同理心，世界在你眼中充滿詩意與可能。你的力量來自於與天地萬物的連結，溫柔卻不可撼動。', traits:['純真','想像','同理','自然'], strong:'創造力豐沛、真誠待人、在混亂中保持本心。', grow:'學會保護自己，純真不代表可以被輕易踐踏，適時展現鋒芒。' },
-  'ENFJ': { id:'zangief', en:'ZANGIEF', cn:'桑吉夫', color:'#D82020', desc:'用鋼鐵肌肉守護信念的民族英雄。你天生具有感召力，總能激勵身邊的人突破極限。你的愛與熱血不只屬於自己，更屬於所有追隨你腳步的人。', traits:['感召','守護','熱血','英雄'], strong:'感染力強、忠誠可靠、將團隊凝聚成一股不可戰勝的力量。', grow:'接受自己的脆弱面，英雄不需要永遠無堅不摧。' },
-  'ENFP': { id:'kimberly', en:'KIMBERLY', cn:'金伯莉', color:'#E060A0', desc:'腦洞大開的忍者粉絲。你天馬行空的創意與無盡的好奇心，讓每一次對戰都變成一場驚喜派對。你用熱情感染世界，讓最嚴肅的戰鬥也充滿歡笑與色彩。', traits:['創意','熱情','好奇','活力'], strong:'想像力爆棚、善於連結人心、化平凡為驚奇。', grow:'練習聚焦，太多好點子同時進行反而會讓每個都只做到一半。' },
-  'ISTJ': { id:'guile', en:'GUILE', cn:'古烈', color:'#336699', desc:'鐵規則軍人，用紀律與責任感構築起堅不可摧的防線。你相信汗水與戰術的完美疊加，每一個微小的準備都在為最終勝利鋪路。你是團隊中最可靠的基石。', traits:['紀律','責任','可靠','務實'], strong:'執行力強、一絲不茍、能在極端壓力下維持穩定輸出。', grow:'學會變通，規則是用來服務目標而非束縛自己。' },
-  'ISFJ': { id:'chunli', en:'CHUN-LI', cn:'春丽', color:'#2060C0', desc:'守護正義的奉獻型警花。你擁有強大的責任感與保護欲，為所愛之人挺身而出是你最自然的反應。你的溫柔與強大從不矛盾，因為最堅韌的鋼也來自最細膩的淬煉。', traits:['守護','奉獻','正義','溫柔'], strong:'細心周全、忠誠可靠、對在乎的人事物願傾盡全力。', grow:'記得照顧自己，守護世界的前提是善待內心那個柔軟的自己。' },
-  'ESTJ': { id:'manon', en:'MANON', cn:'玛侬', color:'#C0A0E0', desc:'用優雅規則掌控全場的模特格鬥家。你相信秩序與美感可以共存，每一個動作都經過精心設計，簡單而致命。你用不容置疑的標準，定義了何謂真正的優雅與強大。', traits:['秩序','優雅','標準','掌控'], strong:'規劃力強、執行精準、以高標準鞭策自己與團隊。', grow:'允許混亂的存在，完美主義是把雙面刃，有時放鬆才能走得更遠。' },
-  'ESFJ': { id:'ehonda', en:'E. HONDA', cn:'本田', color:'#E8A020', desc:'傳統相撲的溫暖傳播者。你堅信透過自己的努力可以讓更多人感受到相撲的魅力。你的慷慨與熱情像一碗熱騰騰的拉麵，樸實卻能溫暖每個需要力量的人。', traits:['溫暖','傳統','慷慨','熱情'], strong:'人際連結強、樂於付出、以實際行動感染他人。', grow:'學習說不，無限付出會消耗自己，保留一些能量給最重要的事。' },
-  'ISTP': { id:'cammy', en:'CAMMY', cn:'嘉米', color:'#40B060', desc:'冷靜精準的特工殺手。你在瞬息萬變的戰場上總能找到最優解，用最少的動作達成最大的效果。沉默寡言只是表象，真正的你在每一次致命出擊中展現全部的專注與才華。', traits:['冷靜','精準','實戰','敏銳'], strong:'反應迅速、判斷準確、在危機中總能找到破綻。', grow:'多與他人交流，單打獨鬥固然高效，但有些問題需要團隊的智慧。' },
-  'ISFP': { id:'jamie', en:'JAMIE', cn:'杰米', color:'#E0A030', desc:'隨性灑脫的飲酒自由人。你活在此時此刻，不受任何規則框架的束縛。你的戰鬥如即興爵士，流暢而不可預測。你用最真實的自我面對世界，而世界也以自由回報你。', traits:['自由','隨性','藝術','灑脫'], strong:'適應力強、活在當下、以獨特風格打破僵局。', grow:'為重要的事情設定底線，自由不等於沒有責任。' },
-  'ESTP': { id:'luke', en:'LUKE', cn:'卢克', color:'#F07820', desc:'莽衝冒險的當代格鬥王。你天生熱愛刺激與挑戰，行動永遠快於思考，因為對你而言，直覺就是最好的戰術。你用拳頭說話，用行動證明，活在腎上腺素的每一次飆升之中。', traits:['冒險','直覺','行動','刺激'], strong:'膽識過人、反應迅捷、在實戰中越打越強。', grow:'停下來思考策略，衝動是雙面刃，有時備用計劃比蠻力更重要。' },
-  'ESFP': { id:'deejay', en:'DEE JAY', cn:'迪杰', color:'#F0C030', desc:'將戰場變成派對的音樂人。你擁有與生俱來的舞台魅力，每一次出場都是一場盛宴。你相信戰鬥也可以快樂，用節奏與笑容感染所有觀眾，連對手都不禁為你喝彩。', traits:['魅力','表演','樂觀','節奏'], strong:'感染力爆棚、享受當下、讓最艱難的戰鬥也充滿歡樂。', grow:'規劃未來，派對總會結束，為散場後的生活做好準備同樣重要。' }
-};
-
-// Compatibility mapping (who you get along with best)
-const COMPAT = {
-  'INTJ': ['ryu','chunli'],
-  'INTP': ['zangief','kimberly'],
-  'ENTJ': ['guile','cammy'],
-  'ENTP': ['lily','jamie'],
-  'INFJ': ['jp','dhalsim'],
-  'INFP': ['juri','luke'],
-  'ENFJ': ['ehonda','manon'],
-  'ENFP': ['dhalsim','deejay'],
-  'ISTJ': ['chunli','ryu'],
-  'ISFJ': ['guile','zangief'],
-  'ESTJ': ['cammy','ken'],
-  'ESFJ': ['luke','kimberly'],
-  'ISTP': ['jp','manon'],
-  'ISFP': ['juri','lily'],
-  'ESTP': ['deejay','jamie'],
-  'ESFP': ['ken','ehonda']
-};
-
-// Questions: 20 total, 5 per dimension
-const QUESTIONS = [
-  // Dimension 1: E (Extraversion) vs I (Introversion)
-  { dim:0, text:'在對戰結束後，你更傾向於？', opts:[
-    { text:'留在現場跟對手與觀眾交流互動，享受賽後氛圍', score:'E' },
-    { text:'一個人安靜地回看錄影，分析自己今天的表現', score:'I' }
-  ]},
-  { dim:0, text:'當你面對一個全新的格鬥流派時，你會？', opts:[
-    { text:'馬上找道館或社群，跟大家一起切磋學習', score:'E' },
-    { text:'獨自在訓練場反覆練習，直到掌握為止', score:'I' }
-  ]},
-  { dim:0, text:'大賽前一晚，你通常選擇？', opts:[
-    { text:'參加選手交流會，跟大家聊聊放鬆心情', score:'E' },
-    { text:'獨處冥想，排除一切外界干擾，專注於明天的戰鬥', score:'I' }
-  ]},
-  { dim:0, text:'你如何看待組隊對戰？', opts:[
-    { text:'太棒了，團隊的化學反應能創造意想不到的精彩', score:'E' },
-    { text:'打得來就組，但一個人的時候反而更能發揮真正實力', score:'I' }
-  ]},
-  { dim:0, text:'訓練時你比較偏好？', opts:[
-    { text:'熱鬧的健身房，各種聲音和氣氛讓你感到有動力', score:'E' },
-    { text:'安靜的山中道場，只有風和呼吸的陪伴', score:'I' }
-  ]},
-
-  // Dimension 2: S (Sensing) vs N (iNtuition)
-  { dim:1, text:'在分析對手弱點時，你的方法是？', opts:[
-    { text:'仔細觀察對方每一場錄影，捕捉具體的動作模式與習慣', score:'S' },
-    { text:'從對手的整體風格與氣場中，推測他的心理弱點與可能破綻', score:'N' }
-  ]},
-  { dim:1, text:'規劃一場重要賽事的訓練菜單時，你更看重？', opts:[
-    { text:'每天的具體訓練項目，按部就班逐步提升', score:'S' },
-    { text:'賽季的整體戰略方向，靈活調整細節以適應大局', score:'N' }
-  ]},
-  { dim:1, text:'在對戰中，你更信賴？', opts:[
-    { text:'千錘百鍊的肌肉記憶與實戰經驗', score:'S' },
-    { text:'當下直覺告訴你的那個決定性瞬間', score:'N' }
-  ]},
-  { dim:1, text:'當有人問你「你為什麼而戰」時，你的回答接近？', opts:[
-    { text:'因為這是我每天都在做的事，我享受進步的過程', score:'S' },
-    { text:'因為我想找到「最強」的真正意義，這是一場永恆的追問', score:'N' }
-  ]},
-  { dim:1, text:'你偏好學習新招式的方式是？', opts:[
-    { text:'看教學影片，一步一步模仿精確的動作', score:'S' },
-    { text:'先理解招式背後的理念與哲學，再從原理推導動作', score:'N' }
-  ]},
-
-  // Dimension 3: T (Thinking) vs F (Feeling)
-  { dim:2, text:'當你的訓練夥伴狀態低迷時，你會？', opts:[
-    { text:'直接指出問題所在，給出具體的改進方案', score:'T' },
-    { text:'先關心他的心理狀態，陪他一起找回節奏', score:'F' }
-  ]},
-  { dim:2, text:'比賽中對手明顯犯規但裁判沒看到，你會？', opts:[
-    { text:'冷靜應對，用實力證明犯規也贏不了你', score:'T' },
-    { text:'據理力爭，公平競技是格鬥的底線，不能就這樣算了', score:'F' }
-  ]},
-  { dim:2, text:'當一個強敵向你發出挑戰時，你最先想到的是？', opts:[
-    { text:'他的戰績數據和技術特點，我要如何破解', score:'T' },
-    { text:'這會是一場精彩的對決，勝負之外更有意義', score:'F' }
-  ]},
-  { dim:2, text:'你更欣賞怎樣的教練風格？', opts:[
-    { text:'嚴格、直接、不講情面，用最高標準逼出你的極限', score:'T' },
-    { text:'鼓勵、陪伴、理解每個人的節奏，相信成長需要時間', score:'F' }
-  ]},
-  { dim:2, text:'如果你輸了一場應該贏的比賽，你的反應是？', opts:[
-    { text:'逐幀分析失敗原因，制定防止重蹈覆轍的計劃', score:'T' },
-    { text:'允許自己難過一陣子，失敗帶來的遺憾也是成長的一部分', score:'F' }
-  ]},
-
-  // Dimension 4: J (Judging) vs P (Perceiving)
-  { dim:3, text:'你如何看待比賽日程的安排？', opts:[
-    { text:'提前規劃好整季的賽程，按部就班地執行', score:'J' },
-    { text:'留出彈性空間，隨時準備迎接意外的強敵', score:'P' }
-  ]},
-  { dim:3, text:'旅途中遇到計劃外的挑戰者時，你會？', opts:[
-    { text:'通常先婉拒，等完成當下目標後再回來接受挑戰', score:'J' },
-    { text:'這就是旅途的意義！計劃可以改，精彩的戰鬥不能錯過', score:'P' }
-  ]},
-  { dim:3, text:'在修行之路上，你更像哪種人？', opts:[
-    { text:'設定明確的階段目標，達成後再挑戰下一階段', score:'J' },
-    { text:'跟著感覺走，讓每一次相遇和戰鬥自然引導你的方向', score:'P' }
-  ]},
-  { dim:3, text:'你如何看待規則與規範？', opts:[
-    { text:'規則是競技的基礎，遵守規則才能公平地證明實力', score:'J' },
-    { text:'規則是框架，真正的強者往往是在框架邊緣找到突破', score:'P' }
-  ]},
-  { dim:3, text:'當你預感到一個難得的訓練機會來臨時，但你已經有其他安排？', opts:[
-    { text:'堅持原計劃，下一次機會一樣會來', score:'J' },
-    { text:'毫不猶豫放下一切，這樣的機會不會有第二次', score:'P' }
-  ]}
+// ============================================================
+// 角色资料库 — 30个角色
+// 向量: [攻击性, 策略感, 情绪化, 社交欲, 抗压力, 表演性, 传统感, 节奏速度]
+// 0-100
+// ============================================================
+const CHARS = [
+  {
+    id:'ryu', name:'RYU', nameEn:'Ryu', nameCn:'隆',
+    color:'#c0392b', gradient:'linear-gradient(135deg,#0a0200 0%,#1e0804 50%,#050508 100%)',
+    emoji:'🥋', tag:'THE SEEKER',
+    tagline:'修行没有终点，只有下一拳',
+    desc:'你不是来炫耀的，你是来练的。对你来说，打架就是一场修行——打完坐下喝口水，说一句"打得不错"然后继续练。你有种奇怪的魅力：明明看起来很无趣，但大家就是会被你吸引。',
+    meme:'玩家都懂：隆使最爱凹升龙拳，打不中就再凹一次，凹到中为止。#波升流祖师爷 #训练模式永住',
+    vector:[80,50,10,25,95,15,95,15],
+    traits:{攻击性:80,策略感:50,情绪化:10,社交欲:25,抗压力:95},
+    strengths:['自律狂魔','从不甩锅','波升流宗师','沉默的可靠'],
+  },
+  {
+    id:'luke', name:'LUKE', nameEn:'Luke', nameCn:'卢克',
+    color:'#e67e22', gradient:'linear-gradient(135deg,#0a0500 0%,#1e1200 50%,#050508 100%)',
+    emoji:'🥊', tag:'THE MENTOR',
+    tagline:'格斗的意义是让每个人都变强',
+    desc:'你有种天生的教练气质。看到新手你会忍不住过去说"来，我教你"。你不是在炫耀——你是真的觉得看别人进步比自己去赢还有成就感。现代模式？你觉得挺好的，让更多人能玩得开心。',
+    meme:'新手福音、现代模式代言人。Luke玩家最大的乐趣不是赢，是看到新手学会了取消连段。#教练我还有救吗 #前前后后拳',
+    vector:[70,65,70,80,78,60,35,65],
+    traits:{攻击性:70,策略感:65,情绪化:70,社交欲:80,抗压力:78},
+    strengths:['天生教练','热情满满','适应力强','绝不嫌你菜'],
+  },
+  {
+    id:'jamie', name:'JAMIE', nameEn:'Jamie', nameCn:'杰米',
+    color:'#f39c12', gradient:'linear-gradient(135deg,#0a0600 0%,#1e1400 50%,#050508 100%)',
+    emoji:'🍶', tag:'THE DRINKER',
+    tagline:'先喝两杯再说',
+    desc:'你的战斗力跟酒精浓度成正比。没喝酒时人畜无害，喝到四杯之后——世界末日。你知道自己的节奏，不着急，慢慢喝，慢慢强。大家都笑你爱喝，但你满酒时真的很可怕。',
+    meme:'杰米使的口头禅："等我喝满"。零酒杰米和四酒杰米是两个不同角色。#超级爆爆回 #喝酒模拟器 #没酒就是废物',
+    vector:[30,55,75,78,60,88,30,70],
+    traits:{攻击性:30,策略感:55,情绪化:75,社交欲:78,抗压力:60},
+    strengths:['后期恐怖','街头义气','气氛担当','逆转专精'],
+  },
+  {
+    id:'chunli', name:'CHUN-LI', nameEn:'Chun-Li', nameCn:'春丽',
+    color:'#3498db', gradient:'linear-gradient(135deg,#000610 0%,#001228 50%,#050508 100%)',
+    emoji:'👊', tag:'THE PILLAR',
+    tagline:'正义不是说出来的，是踢出来的',
+    desc:'你是那种嘴上不说但比谁都在乎的人。你的原则是——不对的事情就不能忍。你不是来交朋友的，但朋友会自己靠近你。因为他们知道，出事了你是第一个站出来的。',
+    meme:'百裂脚复读机，移动速度像开了加速挂。春丽玩家都有强迫症：连段必须打到完美。#百裂百裂百裂 #腿比命长 #正义执行',
+    vector:[75,60,30,68,85,25,75,55],
+    traits:{攻击性:75,策略感:60,情绪化:30,社交欲:68,抗压力:85},
+    strengths:['正义感爆棚','执行力拉满','可靠靠山','腿法宗师'],
+  },
+  {
+    id:'guile', name:'GUILE', nameEn:'Guile', nameCn:'古烈',
+    color:'#2ecc71', gradient:'linear-gradient(135deg,#000a04 0%,#001e0c 50%,#050508 100%)',
+    emoji:'🦅', tag:'THE TURTLE',
+    tagline:'我不动，你也别想动',
+    desc:'蹲。就是蹲著。手刀。脚刀。再蹲。你不喜欢花俏的东西，你觉得防守是最好的进攻。有人说你龟，你笑笑——反正赢的是你。你的耐心是传奇级别的。',
+    meme:'古烈玩家本质：蹲在地上一动不动，等对面跳过来就是一脚刀。有些人说这叫"防守"，古烈玩家说这叫"生活态度"。#龟王之王 #手刀脚刀 #蹲到天荒地老 #来啊你过来啊',
+    vector:[40,90,12,30,95,10,88,10],
+    traits:{攻击性:40,策略感:90,情绪化:12,社交欲:30,抗压力:95},
+    strengths:['耐心无限','防守宗师','家庭优先','稳如磐石'],
+  },
+  {
+    id:'kimberly', name:'KIMBERLY', nameEn:'Kimberly', nameCn:'金柏莉',
+    color:'#e91e8c', gradient:'linear-gradient(135deg,#0a0008 0%,#1e0014 50%,#050508 100%)',
+    emoji:'🎤', tag:'THE HYPE',
+    tagline:'老招式新玩法，这就是我的风格',
+    desc:'你把热情当汽油烧。你喜欢把旧的东西玩出新花样，你觉得格斗和音乐、和跳舞没区别——都是表达。你可能有点吵、有点烦，但谁也无法否认：有你在的地方，能量就是不一样。',
+    meme:'烟雾弹进场→疯狂压制→要么你死要么我死，没有第三种结局。#近身疯狗 #烟雾弹狂魔 #能量饮料成瘾',
+    vector:[85,45,88,72,55,82,25,92],
+    traits:{攻击性:85,策略感:45,情绪化:88,社交欲:72,抗压力:55},
+    strengths:['能量无限','创意满分','感染力强','快节奏王者'],
+  },
+  {
+    id:'juri', name:'JURI', nameEn:'Juri', nameCn:'朱莉',
+    color:'#9b59b6', gradient:'linear-gradient(135deg,#06000a 0%,#10001e 50%,#050508 100%)',
+    emoji:'🕷️', tag:'THE CHAOS',
+    tagline:'打架就是好玩，其他的不重要',
+    desc:'你活在自己的节奏里。你不在乎输赢，你在乎的是——好不好玩。你喜欢把节奏打乱，把对手逼疯。有人说你疯，你觉得他们太无聊。你不是混乱，混乱是你的武器。',
+    meme:'朱莉玩家最爱：风破连踢踢踢踢踢。根本不管会中不会中，踢就完了。#风破连踢 #疯批美人 #踢踢踢踢踢 #我不管我就是要踢',
+    vector:[78,35,92,22,68,88,10,95],
+    traits:{攻击性:78,策略感:35,情绪化:92,社交欲:22,抗压力:68},
+    strengths:['不可预测','自得其乐','节奏破坏者','真实自我'],
+  },
+  {
+    id:'ken', name:'KEN', nameEn:'Ken', nameCn:'肯',
+    color:'#e74c3c', gradient:'linear-gradient(135deg,#0a0000 0%,#1e0000 50%,#050508 100%)',
+    emoji:'🔥', tag:'THE GAMBLER',
+    tagline:'凹，是一种信仰',
+    desc:'你的战斗风格总结起来就一个字：凹。升龙拳凹、龙卷旋风凹、任何能凹的你都凹。外人看来你在赌命，但你觉得——不凹怎么赢？你的游戏风格就是高风险高回报，刺激就完事了。',
+    meme:'全街霸最爱凹的男人。Ken玩家不需要防御——凹中了就帅，凹不中就下一局。#凹升龙 #凹龙卷 #凹一切 #死了也要凹',
+    vector:[90,20,62,55,72,58,25,78],
+    traits:{攻击性:90,策略感:20,情绪化:62,社交欲:55,抗压力:72},
+    strengths:['气势惊人','赌性坚强','从不犹豫','凹王之王'],
+  },
+  {
+    id:'blanka', name:'BLANKA', nameEn:'Blanka', nameCn:'布兰卡',
+    color:'#27ae60', gradient:'linear-gradient(135deg,#000a00 0%,#001e00 50%,#050508 100%)',
+    emoji:'⚡', tag:'THE BEAST',
+    tagline:'滚就完了',
+    desc:'你的内心无比纯粹。你不耍心机、不算计、不阴人——你就只是滚来滚去、放放电。对手恨你，因为他们看不懂你的规律，但其实你自己也不知道自己在做什么。这才是最可怕的。',
+    meme:'滚→放电→再滚→再放电。对手想"他一定有套路"，但布兰卡玩家自己也不知道下一步会按什么。#随机滚动 #人畜无害 #野兽直觉 #妈宝认证',
+    vector:[65,15,75,62,70,75,30,80],
+    traits:{攻击性:65,策略感:15,情绪化:75,社交欲:62,抗压力:70},
+    strengths:['纯粹野性','不可预测','赤子之心','自带快乐'],
+  },
+  {
+    id:'dhalsim', name:'DHALSIM', nameEn:'Dhalsim', nameCn:'达尔西姆',
+    color:'#f1c40f', gradient:'linear-gradient(135deg,#0a0a00 0%,#1e1800 50%,#050508 100%)',
+    emoji:'🕯️', tag:'THE YOGI',
+    tagline:'放火不是目的，折磨才是',
+    desc:'你是远程折磨艺术家。瑜伽火球、长手长脚、瞬移逃跑——你有一套完整的体系让对手怀疑人生。你的情绪永远稳定，因为你知道：对面比你更着急。你用最平静的表情做最搞人心态的事。',
+    meme:'瑜伽火灾远程折磨，长手长脚让对手连碰都碰不到。达尔西姆玩家享受的不是胜利，是对手崩溃的过程。#瑜伽火灾 #你碰不到我 #心态破坏者 #远程折磨艺术',
+    vector:[25,95,8,50,82,30,92,5],
+    traits:{攻击性:25,策略感:95,情绪化:8,社交欲:50,抗压力:82},
+    strengths:['心态无敌','远程掌控','智慧通透','永远不急'],
+  },
+  {
+    id:'ehonda', name:'E. HONDA', nameEn:'E. Honda', nameCn:'本田',
+    color:'#d4a017', gradient:'linear-gradient(135deg,#0a0600 0%,#1e1000 50%,#050508 100%)',
+    emoji:'🏆', tag:'THE SUMO',
+    tagline:'头槌！百裂！头槌！百裂！',
+    desc:'你有两个招式：头槌和百裂手。你只需要这两个招式。对手知道你要用头槌，你还是用头槌，对手还是挡不住。你不搞微操、不打心理战——莽就完了。你的哲学是：如果一招能解决问题，为什么要用第二招？',
+    meme:'新人杀手，三板斧打天下：头槌→百裂→28。低分段霸主，高分段……还是在用头槌。#无脑头槌 #28再28 #百裂手永动机 #三板斧天下',
+    vector:[82,10,70,75,75,68,78,60],
+    traits:{攻击性:82,策略感:10,情绪化:70,社交欲:75,抗压力:75},
+    strengths:['三板斧宗师','豪爽直接','相扑精神','新手噩梦'],
+  },
+  {
+    id:'deejay', name:'DEE JAY', nameEn:'Dee Jay', nameCn:'迪·杰',
+    color:'#1abc9c', gradient:'linear-gradient(135deg,#000a08 0%,#001e16 50%,#050508 100%)',
+    emoji:'🎵', tag:'THE GROOVE',
+    tagline:'生活不只打架，还要跳舞',
+    desc:'你享受节奏本身。打架对你来说跟唱歌跳舞差不多——抓到节奏了就无敌，抓不到就划水。你不会为了胜负红眼，你觉得气氛最重要。你是那种边打边哼歌然后还赢了的人。',
+    meme:'快乐格斗代言人。Dee Jay玩家最大的特点：赢了开心、输了也开心，反正音乐没停。#节奏大师 #快乐格斗 #边打边摇 #气氛组',
+    vector:[55,60,85,88,50,85,30,88],
+    traits:{攻击性:55,策略感:60,情绪化:85,社交欲:88,抗压力:50},
+    strengths:['感染力爆表','节奏天才','永远开心','派对灵魂'],
+  },
+  {
+    id:'manon', name:'MANON', nameEn:'Manon', nameCn:'曼侬',
+    color:'#e74c3c', gradient:'linear-gradient(135deg,#0a0004 0%,#1e000a 50%,#050508 100%)',
+    emoji:'🥇', tag:'THE ARTIST',
+    tagline:'投一次不够，要投到五枚奖牌',
+    desc:'你有精英的自觉也有精英的审美。芭蕾和格斗在你身上完美融合，你追求的不是赢——是赢得漂亮。你享受积累奖牌的过程，一枚、两枚……第五枚到手的时候，对面就知道结束了。',
+    meme:'投技连锁店。曼侬玩家的OS："再让我投一次，就一次，我奖牌到了你就完了。"#奖牌收集癖 #芭蕾杀人事件 #优雅的恐怖 #五枚警告',
+    vector:[60,75,32,58,80,62,68,25],
+    traits:{攻击性:60,策略感:75,情绪化:32,社交欲:58,抗压力:80},
+    strengths:['完美主义','优雅致命','耐心积累','后期发力'],
+  },
+  {
+    id:'marisa', name:'MARISA', nameEn:'Marisa', nameCn:'玛丽莎',
+    color:'#d4a017', gradient:'linear-gradient(135deg,#0a0800 0%,#1e1400 50%,#050508 100%)',
+    emoji:'⚔️', tag:'THE GLADIATOR',
+    tagline:'一拳就够了',
+    desc:'你不绕、不算、不骗——你就是一拳。别人花里胡哨打一套连段，你一拳伤害跟他们一样。你觉得格斗就该这样：堂堂正正，一拳定胜负。你的存在本身就是一种震慑。',
+    meme:'一拳超人。玛丽莎玩家不需要连段——普攻就是连段，重拳就是大招。#一拳超人 #罗马重拳 #简单粗暴 #拳拳到肉',
+    vector:[95,25,52,72,82,55,42,20],
+    traits:{攻击性:95,策略感:25,情绪化:52,社交欲:72,抗压力:82},
+    strengths:['力量压制','直来直往','斗志惊人','一拳超人'],
+  },
+  {
+    id:'jp', name:'JP', nameEn:'JP', nameCn:'JP',
+    color:'#8e44ad', gradient:'linear-gradient(135deg,#060010 0%,#0c0028 50%,#050508 100%)',
+    emoji:'♟️', tag:'THE ARCHITECT',
+    tagline:'你以为你在打架，其实你在我的棋盘上',
+    desc:'你不是在打架，你是在下棋。你永远比对手多想三步。你的表情永远是——那种让人不安的微笑。远程攻击、空间控制、关厕所……你在做的事情不是格斗，是布局。',
+    meme:'远程机关算尽，关厕所专家。JP玩家不跟你打近身——你连靠近都做不到。#下棋不是打架 #关厕所之王 #微笑杀手 #机关大师',
+    vector:[55,98,10,15,85,20,60,8],
+    traits:{攻击性:55,策略感:98,情绪化:10,社交欲:15,抗压力:85},
+    strengths:['战略天才','心态碾压','布局宗师','微笑即武器'],
+  },
+  {
+    id:'zangief', name:'ZANGIEF', nameEn:'Zangief', nameCn:'桑吉尔夫',
+    color:'#c0392b', gradient:'linear-gradient(135deg,#0a0000 0%,#1e0404 50%,#050508 100%)',
+    emoji:'💪', tag:'THE MOUNTAIN',
+    tagline:'靠近我，然后就没有然后了',
+    desc:'你是一座移动的山。你的计划很简单：走过去、抱起来、摔下去。脆皮角色看到你就想跑，豪鬼玩家见到你就想投降。你不搞复杂的东西，因为你不需要——你的存在本身已经足够让人害怕。',
+    meme:'豪鬼终极噩梦，近身就死。老桑玩家最爱说的话："你跑啊，你继续跑啊。"#豪鬼杀手 #苏联大壮 #360抱摔 #过来吧你',
+    vector:[88,40,65,78,90,55,70,28],
+    traits:{攻击性:88,策略感:40,情绪化:65,社交欲:78,抗压力:90},
+    strengths:['压迫感MAX','肌肉精神','豪鬼噩梦','近身即死'],
+  },
+  {
+    id:'lily', name:'LILY', nameEn:'Lily', nameCn:'莉莉',
+    color:'#27ae60', gradient:'linear-gradient(135deg,#000800 0%,#001800 50%,#050508 100%)',
+    emoji:'🌿', tag:'THE BREEZE',
+    tagline:'风会告诉我答案',
+    desc:'你有一种跟大自然连接的力量。你不吵不闹，但你的风刃不是吃素的。你的直觉特别准，你知道什么时候该出手——只是你大多数时候选择和平。但你其实不好惹。',
+    meme:'小型桑吉尔夫。莉莉最强的地方：让人以为她好欺负，然后突然一套风来炮教做人。#小桑吉 #风刃警告 #别欺负矮个子 #自然之力',
+    vector:[62,65,38,72,75,35,82,40],
+    traits:{攻击性:62,策略感:65,情绪化:38,社交欲:72,抗压力:75},
+    strengths:['直觉敏锐','自然共鸣','隐藏实力','平和但危险'],
+  },
+  {
+    id:'cammy', name:'CAMMY', nameEn:'Cammy', nameCn:'嘉米',
+    color:'#1abc9c', gradient:'linear-gradient(135deg,#000a08 0%,#001e18 50%,#050508 100%)',
+    emoji:'🎯', tag:'THE BLADE',
+    tagline:'速度就是力量',
+    desc:'你做事讲究效率。你的速度让你不需要太复杂的策略——快到对手反应不过来就赢了。你有点冷、有点距离感，但那只是因为你需要专注。你在乎的事情你会拼命去保护。',
+    meme:'速度快但刮痧，螺旋箭连打连打再连打。嘉米玩家的人生：要么完美压制，要么被一拳打飞。#螺旋箭 #快到你追不上 #刮痧艺术 #精准打击',
+    vector:[78,62,22,48,72,30,55,82],
+    traits:{攻击性:78,策略感:62,情绪化:22,社交欲:48,抗压力:72},
+    strengths:['速度压制','精准高效','冷静犀利','保护本能'],
+  },
+  {
+    id:'rashid', name:'RASHID', nameEn:'Rashid', nameCn:'拉希德',
+    color:'#3498db', gradient:'linear-gradient(135deg,#000a18 0%,#001430 50%,#050508 100%)',
+    emoji:'🌪️', tag:'THE WIND',
+    tagline:'我来了我走了我又来了',
+    desc:'你不是在打架，你是在跑酷。你飞来飞去、跳来跳去，对面根本不知道你下一秒会出现在哪里——你自己可能也不知道。你的风格就是快、乱、烦，然后突然就赢了。',
+    meme:'全程跑酷模式。拉希德玩家不一定知道自己在做什么，但对面一定不知道。#风之跑酷 #飞天遁地 #你追不到 #快乐划水',
+    vector:[72,48,78,85,62,82,20,95],
+    traits:{攻击性:72,策略感:48,情绪化:78,社交欲:85,抗压力:62},
+    strengths:['速度天花板','气氛活跃','重情重义','无法锁定'],
+  },
+  {
+    id:'aki', name:'A.K.I.', nameEn:'A.K.I.', nameCn:'阿鬼',
+    color:'#8e44ad', gradient:'linear-gradient(135deg,#06000e 0%,#0e0022 50%,#050508 100%)',
+    emoji:'🐍', tag:'THE OBSESSED',
+    tagline:'毒液是爱，也是一种语言',
+    desc:'你有自己的世界、自己的逻辑、自己的美学。你的投入度是病态级别的——你一旦对什么感兴趣，就会沉到最深的地方去。你跟人不熟，但你对你认可的人有一种扭曲但真挚的忠诚。',
+    meme:'毒连专家，病娇属性拉满。A.K.I.玩家喜欢做的事：放毒→看对面慢慢掉血→微笑。#毒液连段 #病娇上线 #慢慢折磨 #诡异魅力',
+    vector:[62,70,55,18,72,48,55,42],
+    traits:{攻击性:62,策略感:70,情绪化:55,社交欲:18,抗压力:72},
+    strengths:['专注极致','独特美学','病态忠诚','毒连艺术'],
+  },
+  {
+    id:'ed', name:'ED', nameEn:'Ed', nameCn:'艾德',
+    color:'#3498db', gradient:'linear-gradient(135deg,#000c18 0%,#001830 50%,#050508 100%)',
+    emoji:'🔵', tag:'THE ESCAPEE',
+    tagline:'我不是谁的工具，我是我自己',
+    desc:'你有一种从束缚中挣脱出来的狠劲。你不是天选之人、不是天生强者——但你有足够的意志把自己打造成你想成为的样子。你找到了一群同伴，这就是你的世界。',
+    meme:'暗影拳连打，拳拳到肉不解释。Ed玩家：不搞虚的，只打实的。#暗影拳 #拳拳到肉 #踏实派 #从不废话',
+    vector:[72,58,48,52,80,35,30,55],
+    traits:{攻击性:72,策略感:58,情绪化:48,社交欲:52,抗压力:80},
+    strengths:['意志坚韧','脚踏实地','忠于自我','拳拳到肉'],
+  },
+  {
+    id:'gouki_akuma', name:'GOUKI', nameEn:'Gouki/Akuma', nameCn:'豪鬼',
+    color:'#8e0000', gradient:'linear-gradient(135deg,#0a0000 0%,#1e0000 50%,#050508 100%)',
+    emoji:'👹', tag:'THE DEMON',
+    tagline:'瞬狱杀。然后就没有然后了。',
+    desc:'你把一切都投入到了变强这件事上。你舍弃了友情、家庭、甚至一部分人性——只为了成为最强。你可能是全街霸最脆皮的角色，但你的输出是全街霸最恐怖的。高回报，因为你赌的是全部。',
+    meme:'脆皮炮王，老桑见一次打一次。豪鬼玩家名言："只要我没被摸到，我就是无敌的。"然后被老桑一个360抱摔带走。#瞬狱杀赌命 #老桑恐惧症 #玻璃大炮 #输出即生存',
+    vector:[98,35,8,5,100,15,92,5],
+    traits:{攻击性:98,策略感:35,情绪化:8,社交欲:5,抗压力:100},
+    strengths:['极限输出','舍弃一切','意志如钢','瞬狱杀传说'],
+  },
+  {
+    id:'vega_mbison', name:'BISON', nameEn:'M.Bison', nameCn:'拜森（维加）',
+    color:'#6c0000', gradient:'linear-gradient(135deg,#080000 0%,#160000 50%,#050508 100%)',
+    emoji:'👑', tag:'THE TYRANT',
+    tagline:'统治不是手段，是本能',
+    desc:'你走路自带BGM。你的存在感就是你的武器——你不需要证明自己，因为你知道你有多强。你的自信不是装的，是刻在骨头里的。你有点可怕，但你的确让人无法忽视。',
+    meme:'踩头狂魔、精神能量机关枪。拜森玩家：全程压著打，不给对手任何呼吸空间。#踩头 #压制之王 #存在即威胁 #精神能量',
+    vector:[92,72,12,10,88,45,80,8],
+    traits:{攻击性:92,策略感:72,情绪化:12,社交欲:10,抗压力:88},
+    strengths:['压倒性气场','统治本能','战略清晰','不可撼动'],
+  },
+  {
+    id:'terry', name:'TERRY', nameEn:'Terry', nameCn:'特瑞',
+    color:'#e74c3c', gradient:'linear-gradient(135deg,#0a0000 0%,#1e0404 50%,#050508 100%)',
+    emoji:'🧢', tag:'THE LEGEND',
+    tagline:'Are you okay? BUSTER WOLF!',
+    desc:'你是那种大家看到你就很安心的存在。你不装、不端，你只想好好打一场然后去吃饭。你对后辈很好，因为你记得自己也是从什么都不懂开始的。你的魅力来自真实。',
+    meme:'饿狼传说男主角，力量冲拳+爆裂狼。"Are you okay?"——然后对面就飞出去了。#BusterWolf #饿狼传说 #老将魂 #正能量',
+    vector:[75,55,78,88,78,72,40,72],
+    traits:{攻击性:75,策略感:55,情绪化:78,社交欲:88,抗压力:78},
+    strengths:['热血燃烧','平易近人','老将魅力','正能量爆棚'],
+  },
+  {
+    id:'mai', name:'MAI', nameEn:'Mai', nameCn:'不知火舞',
+    color:'#e74c3c', gradient:'linear-gradient(135deg,#0a0000 0%,#1e0008 50%,#050508 100%)',
+    emoji:'🦋', tag:'THE FLAME',
+    tagline:'扇子是用来丢的，不是用来搧风的',
+    desc:'你的热情是火焰级别的。你要么全力以赴、要么就不做。你的感情浓烈、手段直接、气场满格。你有一种让人无法忽视的存在感——不是因为你吵，是因为你亮。',
+    meme:'扇子满天飞，到了面前一套连段带走。不知火舞玩家：边丢扇子边突进，你永远不知道她什么时候已经到你面前了。#扇子飞舞 #火焰热情 #满状态输出 #福利担当',
+    vector:[80,55,90,75,68,78,30,78],
+    traits:{攻击性:80,策略感:55,情绪化:90,社交欲:75,抗压力:68},
+    strengths:['热情如火','全力以赴','魅力四射','直接了当'],
+  },
+  {
+    id:'elena', name:'ELENA', nameEn:'Elena', nameCn:'艾莲娜',
+    color:'#27ae60', gradient:'linear-gradient(135deg,#000a00 0%,#002200 50%,#050508 100%)',
+    emoji:'🌍', tag:'THE HEALER',
+    tagline:'打完了？没事，我帮你回血，然后再打',
+    desc:'你是全街霸最阳光的人。你没有阴暗面、没有复仇动机、没有苦大仇深的故事——你就是想认识更多人，去更多地方，打更多好玩的架。你会回血，不是因为你弱，是因为你想多打一会。',
+    meme:'全街霸最快乐人格。打着打着自己回血了，对面心态炸了，她还在笑。#回血小天使 #快乐非洲 #你累了就休息我再打一会 #正面能量',
+    vector:[40,45,92,95,55,82,30,90],
+    traits:{攻击性:40,策略感:45,情绪化:92,社交欲:95,抗压力:55},
+    strengths:['阳光灿烂','朋友满天下','回血天使','快乐传染'],
+  },
+  {
+    id:'sagat', name:'SAGAT', nameEn:'Sagat', nameCn:'沙加特',
+    color:'#d35400', gradient:'linear-gradient(135deg,#0a0400 0%,#1e0a00 50%,#050508 100%)',
+    emoji:'👁️', tag:'THE REDEEMER',
+    tagline:'曾经的耻辱，铸成今日的强大',
+    desc:'你是有故事的人。你曾经在最风光的时候跌得最重，但你没有崩溃——你选择消化那次失败，让它成为你力量的一部分。你不再执著于征服，而是专注于超越昨天的自己。',
+    meme:'原波升之王，独眼泰拳复仇者。沙加特玩家：波升稳如老狗，不搞花活，每一拳都是阅历。#波升之王 #泰拳传奇 #浴火重生 #稳如老狗',
+    vector:[82,72,25,38,90,25,80,18],
+    traits:{攻击性:82,策略感:72,情绪化:25,社交欲:38,抗压力:90},
+    strengths:['浴火重生','沉默尊严','波升之王','超越自我'],
+  },
+  {
+    id:'alex', name:'ALEX', nameEn:'Alex', nameCn:'亚历克斯',
+    color:'#2980b9', gradient:'linear-gradient(135deg,#000a18 0%,#001430 50%,#050508 100%)',
+    emoji:'🥋', tag:'THE AVENGER',
+    tagline:'为了重要的人，我不惜一切',
+    desc:'你不是为了出名而战。你的驱动力来自一个非常具体的理由——可能是某个人、某件事。这让你不需要任何外在激励。你有点粗糙、有点直接，但你的心是世界上最直的。',
+    meme:'重拳近战流，投技连段直来直去。Alex玩家：不跟你玩心理战，过来就摔。#重拳出击 #直来直往 #复仇者意志 #简单有力',
+    vector:[78,42,58,65,85,40,40,55],
+    traits:{攻击性:78,策略感:42,情绪化:58,社交欲:65,抗压力:85},
+    strengths:['为情而战','重拳出击','信念驱动','从不绕弯'],
+  },
+  {
+    id:'cviper', name:'C.VIPER', nameEn:'C.Viper', nameCn:'毒蛇（维珀）',
+    color:'#e74c3c', gradient:'linear-gradient(135deg,#0a0006 0%,#1e0010 50%,#050508 100%)',
+    emoji:'🔫', tag:'THE OPERATIVE',
+    tagline:'任务完成，其他不重要',
+    desc:'你把效率刻进了骨头里。你的世界分为任务和非任务，情感是变数，纪律是常数。你在工作状态和私下完全不同——因为你知道什么时候该认真，什么时候可以放松。',
+    meme:'高科技特工，火焰拳+电击踢。毒蛇玩家：精准执行，绝不拖泥带水。#任务至上 #特工风范 #双面人生 #精准打击',
+    vector:[72,88,20,45,88,28,48,62],
+    traits:{攻击性:72,策略感:88,情绪化:20,社交欲:45,抗压力:88},
+    strengths:['效率极致','双重身份','精准执行','目标导向'],
+  },
+  {
+    id:'ingrid', name:'INGRID', nameEn:'Ingrid', nameCn:'英格丽德',
+    color:'#9b59b6', gradient:'linear-gradient(135deg,#080010 0%,#140028 50%,#050508 100%)',
+    emoji:'✨', tag:'THE ENIGMA',
+    tagline:'你不用懂我，你只需要看着',
+    desc:'你有一种让人说不出来的气场。不是刻意的神秘——你就是神秘本身。你不解释自己，不讨好任何人，但你永远是房间里最引人注目的人。你的力量来源不被理解，这反而让你更迷人。',
+    meme:'谜之少女，时间操控。英格丽德玩家：你不理解她怎么赢的，她也不需要你理解。#时间之力 #谜之存在 #无法定义 #自成一格',
+    vector:[58,78,30,28,82,22,65,35],
+    traits:{攻击性:58,策略感:78,情绪化:30,社交欲:28,抗压力:82},
+    strengths:['无法被定义','深不可测','时间掌控','神秘气场'],
+  },
 ];
 
-// ==================== STATE ====================
-let currentDim = 0;
+// ============================================================
+// 20道题 — 短、有趣、有梗
+// 选项向量: [攻击性,策略感,情绪化,社交欲,抗压力,表演性,传统感,节奏速度]
+// ============================================================
+const QUESTIONS = [
+  {
+    cat:'🥊 你的打法',
+    text:'对局开始，你的第一件事是？',
+    opts:[
+      {t:'冲过去，先打再说！', w:[20,2,8,5,10,5,2,18]},
+      {t:'蹲下防守，看看对面想干嘛', w:[2,18,2,2,15,2,15,2]},
+      {t:'先喝两口，不急', w:[2,8,15,12,5,12,2,10]},
+      {t:'发个波，试探一下', w:[8,12,3,2,8,8,12,5]},
+    ]
+  },
+  {
+    cat:'🥊 你的打法',
+    text:'你处于劣势，血量见底，你会？',
+    opts:[
+      {t:'赌一把凹升龙！不凹不是人！', w:[22,2,15,5,18,10,2,15]},
+      {t:'冷静分析，找机会翻盘', w:[5,20,2,2,22,2,12,2]},
+      {t:'就算死也要站着死，正面刚', w:[18,5,10,8,15,8,10,5]},
+      {t:'放弃这局，下一局重来', w:[2,12,5,5,8,8,8,5]},
+    ]
+  },
+  {
+    cat:'🎯 角色偏好',
+    text:'你最怕遇到哪种类型的对手？',
+    opts:[
+      {t:'近身压制型的，碰一下就蒸发（老桑、玛丽莎）', w:[5,8,12,5,10,5,5,8]},
+      {t:'全程蹲在地上不动的，打不进去（古烈）', w:[8,10,5,2,12,2,10,2]},
+      {t:'远程折磨型的，根本摸不到人（达尔西姆、JP）', w:[15,8,8,2,15,5,5,5]},
+      {t:'我不怕任何人，怕的是自己失误', w:[18,2,3,5,20,2,8,5]},
+    ]
+  },
+  {
+    cat:'🎯 角色偏好',
+    text:'连段失误了，你的反应？',
+    opts:[
+      {t:'没事，再试一次，练到完美为止', w:[12,8,2,5,18,2,15,5]},
+      {t:'换个简单的连段，稳定比花俏重要', w:[5,15,2,8,12,2,12,2]},
+      {t:'直接乱按，说不定对面也慌了', w:[8,2,18,8,5,15,2,18]},
+      {t:'笑一下，跟对面说"我的锅"', w:[2,5,10,15,8,12,3,8]},
+    ]
+  },
+  {
+    cat:'🧠 思维风格',
+    text:'你觉得格斗游戏最重要的是什么？',
+    opts:[
+      {t:'基本功！波升立回才是王道', w:[10,12,2,3,15,2,20,5]},
+      {t:'心态！对面心态崩了你自然赢', w:[5,18,8,5,10,8,8,5]},
+      {t:'节奏！让对面跟着你的节奏走', w:[8,8,12,8,8,15,5,15]},
+      {t:'直觉！想那么多干嘛，打了再说', w:[18,2,15,5,12,5,2,12]},
+    ]
+  },
+  {
+    cat:'🧠 思维风格',
+    text:'训练模式对你来说是？',
+    opts:[
+      {t:'第二个家，随时都在里面泡着', w:[15,8,2,2,18,2,15,5]},
+      {t:'偶尔去练一下连段，差不多就行', w:[5,10,5,8,8,5,8,5]},
+      {t:'无聊死了，直接打对战有趣多了', w:[5,2,15,15,3,18,2,18]},
+      {t:'研究对策的地方，仔细分析每个角色', w:[8,20,2,5,12,2,10,2]},
+    ]
+  },
+  {
+    cat:'💬 社交风格',
+    text:'在线对战中，对面用嘲讽动作，你会？',
+    opts:[
+      {t:'用更强的实力打回去，让他闭嘴', w:[18,8,12,3,18,5,8,5]},
+      {t:'嘲讽回去！以牙还牙！', w:[12,2,18,8,5,20,2,15]},
+      {t:'无视，专心打好自己的', w:[8,15,2,5,12,2,15,2]},
+      {t:'加好友问问他为什么这么开心', w:[2,5,10,18,5,12,3,10]},
+    ]
+  },
+  {
+    cat:'💬 社交风格',
+    text:'你的队友一直输，你会？',
+    opts:[
+      {t:'耐心指导，带他练到你满意为止', w:[8,12,5,15,12,5,12,3]},
+      {t:'"没事，下一场我carry"', w:[15,5,8,10,15,10,5,8]},
+      {t:'默默换成自己的主力角色', w:[10,8,2,2,10,2,8,5]},
+      {t:'开玩笑吐槽两句然后继续打', w:[2,5,12,18,5,15,2,12]},
+    ]
+  },
+  {
+    cat:'😤 压力处理',
+    text:'连输五场之后你会？',
+    opts:[
+      {t:'继续打！不赢一场不下线！', w:[22,2,18,3,22,8,5,15]},
+      {t:'打开回放，仔细分析每场输在哪', w:[5,22,2,2,18,2,10,2]},
+      {t:'关游戏去看影片或者吃东西', w:[3,5,12,5,8,8,5,5]},
+      {t:'换个角色玩玩，转换心情', w:[5,8,10,10,8,12,3,10]},
+    ]
+  },
+  {
+    cat:'😤 压力处理',
+    text:'你觉得最能让你变强的方式是？',
+    opts:[
+      {t:'一直练同一个角色，练到极致', w:[18,8,2,2,20,3,18,3]},
+      {t:'多看高手对局，学习战术思路', w:[5,18,2,8,12,5,10,5]},
+      {t:'多跟不同的人打，在实战中成长', w:[8,5,12,15,10,12,3,12]},
+      {t:'练基本功，回归最简单的东西', w:[12,10,3,5,15,2,18,5]},
+    ]
+  },
+  {
+    cat:'🎭 角色扮演',
+    text:'如果你是一个SF6角色，你的主题曲是？',
+    opts:[
+      {t:'史诗级的管弦乐，气势磅礴', w:[15,10,5,3,12,15,5,5]},
+      {t:'摇滚或金属，就是要燃', w:[18,3,15,5,15,18,2,18]},
+      {t:'轻快的电子或爵士，有节奏感', w:[5,8,8,12,5,12,5,15]},
+      {t:'东方感强的旋律，深沉内敛', w:[8,12,2,5,18,3,18,3]},
+    ]
+  },
+  {
+    cat:'🎭 角色扮演',
+    text:'你最可能用哪种方式庆祝胜利？',
+    opts:[
+      {t:'不庆祝，默默准备下一场', w:[12,12,2,2,15,2,15,2]},
+      {t:'站起来振臂欢呼！YEAH！', w:[15,3,18,12,5,18,3,12]},
+      {t:'在聊天框打个"GG"，有礼貌', w:[5,8,5,15,8,8,8,5]},
+      {t:'做一个招牌动作，对手必须看到', w:[10,5,12,5,8,20,5,10]},
+    ]
+  },
+  {
+    cat:'📖 格斗哲学',
+    text:'你对“现代模式”的看法？',
+    opts:[
+      {t:'挺好的！让更多人能享受格斗游戏', w:[5,8,8,18,5,10,2,12]},
+      {t:'不喜欢，格斗就该经典搓招', w:[8,10,3,2,12,3,18,3]},
+      {t:'无所谓，打赢就行，管他用什么', w:[12,5,8,2,8,5,5,5]},
+      {t:'我自己不玩，但我尊重别人的选择', w:[3,12,5,8,10,5,8,5]},
+    ]
+  },
+  {
+    cat:'📖 格斗哲学',
+    text:'你觉得“强”的最终形态是？',
+    opts:[
+      {t:'不需要证明自己，因为你就是强', w:[18,8,2,3,20,3,12,2]},
+      {t:'让对手心服口服，不是靠压制是靠理解', w:[5,18,5,10,12,5,10,5]},
+      {t:'享受过程，胜负是附属品', w:[3,5,15,15,5,18,2,15]},
+      {t:'回去教给下一代，传承才是真的强', w:[8,10,8,18,8,8,15,5]},
+    ]
+  },
+  {
+    cat:'🌙 日常状态',
+    text:'周末晚上，没有约，你会？',
+    opts:[
+      {t:'开训练模式，练新连段', w:[15,10,2,2,15,2,15,5]},
+      {t:'上线找陌生人打架，来者不拒', w:[12,5,8,8,12,8,5,12]},
+      {t:'约朋友开房互相切磋然后聊天', w:[3,5,10,20,5,12,5,10]},
+      {t:'看高手比赛影片，学习新套路', w:[5,18,3,5,10,3,10,2]},
+    ]
+  },
+  {
+    cat:'🌙 日常状态',
+    text:'打完一场激烈的对局，你现在的感觉？',
+    opts:[
+      {t:'热血沸腾，立刻排下一场！', w:[20,2,15,5,15,12,2,18]},
+      {t:'坐下来慢慢回味刚才的对局', w:[8,15,5,3,10,3,10,5]},
+      {t:'去找刚才的人加好友，约下次再打', w:[3,5,8,20,5,10,5,8]},
+      {t:'喝水休息，手感好的话继续', w:[10,8,3,5,12,3,12,3]},
+    ]
+  },
+  {
+    cat:'💡 价值判断',
+    text:'你的角色被版本削弱了，你会？',
+    opts:[
+      {t:'继续用，真爱不分强弱', w:[12,5,8,8,15,8,15,5]},
+      {t:'研究新打法，适应版本变化', w:[8,18,2,3,15,3,8,3]},
+      {t:'换一个强势角色暂时玩玩', w:[10,12,2,2,8,5,5,5]},
+      {t:'吐槽官方然后继续玩', w:[5,5,12,12,8,10,5,8]},
+    ]
+  },
+  {
+    cat:'💡 价值判断',
+    text:'你更欣赏哪种人？',
+    opts:[
+      {t:'把一个角色练到极致的高手', w:[18,8,2,3,20,2,18,3]},
+      {t:'能用不同角色都打得好的人', w:[8,15,5,8,12,8,5,10]},
+      {t:'打法极具创意、让人意想不到的人', w:[5,5,12,8,5,18,2,18]},
+      {t:'输了也笑嘻嘻、享受游戏的人', w:[2,5,15,18,5,15,3,12]},
+    ]
+  },
+  {
+    cat:'🔥 终极一问',
+    text:'如果格斗只有一条真理，你选？',
+    opts:[
+      {t:'修行：格斗是跟自己对话的过程', w:[12,8,2,3,18,3,18,3]},
+      {t:'智慧：赢在脑子，不是拳头', w:[3,20,2,5,15,2,10,2]},
+      {t:'快乐：格斗不好玩就没意义了', w:[2,3,18,18,3,20,2,18]},
+      {t:'尊严：站着打，站着输', w:[18,5,8,5,18,8,8,5]},
+    ]
+  },
+  {
+    cat:'🔥 终极一问',
+    text:'最后问你：你理想中自己在SF6里的评价是？',
+    opts:[
+      {t:'"这个人好强，我想跟他打"', w:[18,8,3,5,18,5,10,5]},
+      {t:'"跟他打太折磨了，完全动不了"', w:[5,20,2,2,15,2,8,2]},
+      {t:'"跟他打不管输赢都超好玩！"', w:[2,5,15,20,5,18,3,18]},
+      {t:'"这个人是真正的格斗家"', w:[12,10,5,8,18,3,15,5]},
+    ]
+  },
+];
+
+// ============================================================
+// 状态
+// ============================================================
+let answers = new Array(QUESTIONS.length).fill(null);
 let currentQ = 0;
-let answers = {}; // key: question index, value: 'E'/'I' etc.
-const dimNames = ['ENERGY','NATURE','TACTICS','IDENTITY'];
-const dimPairs = [['E','I'],['S','N'],['T','F'],['J','P']];
-const dimLabels = ['外向 Extraversion / 內向 Introversion','實感 Sensing / 直覺 Intuition','思考 Thinking / 情感 Feeling','判斷 Judging / 感知 Perceiving'];
 
-// ==================== INIT ====================
-function init() {
-  buildCharGrid();
-}
+// ============================================================
+// 预加载角色立绘
+// ============================================================
+const preloadImages = () => {
+  CHARS.forEach(c => {
+    const img = new Image();
+    img.src = `sf6-chars/${c.id}.png`;
+    img.onload = () => { c._imgOk = true; };
+    img.onerror = () => { c._imgOk = false; };
+  });
+};
+window.onload = preloadImages;
 
-function buildCharGrid() {
-  const grid = document.getElementById('charGrid');
-  const entries = Object.entries(CHARACTERS);
-  grid.innerHTML = entries.map(([mbti, ch]) => `
-    <div class="char-card" onclick="alert('${ch.en} - ${mbti}\\n${ch.cn}')" style="background:${ch.color}10">
-      <img src="sf6-chars/${ch.id}.png" alt="${ch.en}" loading="lazy" onerror="this.style.display='none'">
-      <div class="char-label">${ch.en}<span class="char-cn">${ch.cn} · ${mbti}</span></div>
-    </div>
-  `).join('');
-}
-
-// ==================== TEST FLOW ====================
-function startTest() {
-  document.getElementById('home-section').style.display = 'none';
-  document.getElementById('characters-section').style.display = 'none';
-  document.getElementById('result-section').classList.remove('active');
-  document.getElementById('test-section').classList.add('active');
-  currentDim = 0;
+// ============================================================
+// 开始测试
+// ============================================================
+function startQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
   currentQ = 0;
-  answers = {};
-  buildDimTabs();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('quiz-screen').classList.add('active');
+  buildDots();
   renderQuestion();
-  updateHUD();
+  // 确保滚动到题目区
+  setTimeout(() => {
+    document.getElementById('quiz-screen').scrollIntoView({behavior:'smooth',block:'start'});
+  }, 50);
 }
 
-function buildDimTabs() {
-  const container = document.getElementById('dimTabs');
-  container.innerHTML = dimNames.map((name, i) => `
-    <button class="dim-tab ${i === currentDim ? 'active' : ''}" onclick="switchDim(${i})">${name}</button>
-  `).join('');
+function buildDots() {
+  const container = document.getElementById('prog-dots');
+  container.innerHTML = '';
+  QUESTIONS.forEach(() => {
+    const d = document.createElement('div');
+    d.className = 'prog-dot';
+    container.appendChild(d);
+  });
 }
 
-function switchDim(dimIndex) {
-  // Only allow switching to completed dimensions or the current one
-  const dimStart = dimIndex * 5;
-  const allAnswered = QUESTIONS.slice(dimStart, dimStart + 5).every((_, i) => answers[dimStart + i] !== undefined);
-  if (dimIndex <= currentDim || allAnswered) {
-    currentDim = dimIndex;
-    currentQ = dimStart;
-    buildDimTabs();
-    renderQuestion();
-    updateHUD();
-  }
+function updateDots() {
+  document.querySelectorAll('.prog-dot').forEach((d, i) => {
+    d.classList.remove('done','current');
+    if (i < currentQ) d.classList.add('done');
+    else if (i === currentQ) d.classList.add('current');
+  });
 }
 
 function renderQuestion() {
-  const container = document.getElementById('questionContainer');
   const q = QUESTIONS[currentQ];
-  document.getElementById('dimLabel').textContent = `DIMENSION ${currentDim + 1}/4`;
-  document.getElementById('dimTitle').textContent = dimNames[currentDim];
+  document.getElementById('q-cat').textContent = q.cat;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-num').textContent = String(currentQ+1).padStart(2,'0');
+  document.getElementById('q-counter').textContent = `${currentQ+1}/${QUESTIONS.length}`;
+  document.getElementById('cat-label').textContent = q.cat;
+  document.getElementById('prog-fill').style.width = `${(currentQ/QUESTIONS.length)*100}%`;
+  updateDots();
 
-  container.innerHTML = `
-    <div class="question-block fade-in">
-      <div class="q-num">Q${currentQ + 1} · ${dimNames[currentDim]}</div>
-      <div class="q-text">${q.text}</div>
-      <div class="options">
-        ${q.opts.map((opt, oi) => `
-          <button class="option-btn ${answers[currentQ] === opt.score ? 'selected' : ''}" onclick="selectAnswer('${opt.score}', this)">
-            <span class="opt-marker">${String.fromCharCode(65 + oi)}</span>
-            ${opt.text}
-          </button>
-        `).join('')}
-      </div>
-    </div>
-  `;
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.opts.forEach((o, i) => {
+    const div = document.createElement('div');
+    div.className = 'opt' + (answers[currentQ] === i ? ' selected' : '');
+    div.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${o.t}</span>`;
+    div.onclick = () => selectOpt(i);
+    opts.appendChild(div);
+  });
 
-  document.getElementById('continueBtn').disabled = answers[currentQ] === undefined;
+  document.getElementById('btn-prev').style.visibility = currentQ > 0 ? '' : 'hidden';
+  document.getElementById('btn-next').textContent = currentQ === QUESTIONS.length-1 ? '查看结果 ✦' : '下一题 →';
+
+  // 重新触发动画
+  const qb = document.getElementById('q-box');
+  qb.classList.remove('fade-in');
+  void qb.offsetWidth;
+  qb.classList.add('fade-in');
 }
 
-function selectAnswer(score, btn) {
-  answers[currentQ] = score;
-  document.getElementById('continueBtn').disabled = false;
-  // Update button styles
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
+function selectOpt(i) {
+  answers[currentQ] = i;
+  document.querySelectorAll('.opt').forEach((o,j) => o.classList.toggle('selected', j===i));
 }
 
-function nextQuestion() {
-  if (currentQ < 19) {
+function nextQ() {
+  if (answers[currentQ] === null) {
+    const qb = document.getElementById('q-box');
+    qb.style.borderColor = 'var(--purple-light)';
+    setTimeout(() => qb.style.borderColor = '', 600);
+    return;
+  }
+  if (currentQ < QUESTIONS.length - 1) {
     currentQ++;
-    // Update currentDim
-    currentDim = Math.floor(currentQ / 5);
-    buildDimTabs();
     renderQuestion();
-    updateHUD();
+    document.getElementById('quiz-screen').scrollIntoView({behavior:'smooth',block:'start'});
   } else {
-    // Test complete
     showResult();
   }
 }
 
-function updateHUD() {
-  const answered = Object.keys(answers).length;
-  const pct = (answered / 20) * 100;
-  document.getElementById('hudFill').style.width = pct + '%';
-  document.getElementById('hudPercent').textContent = answered + '/20';
+function prevQ() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
 }
 
-// ==================== RESULT ====================
+// ============================================================
+// 计算结果 ─ 使用 Cosine Similarity（余弦相似度）
+// 解决之前“总是 E.HONDA”的 bug
+// ============================================================
 function showResult() {
-  document.getElementById('test-section').classList.remove('active');
-  document.getElementById('home-section').style.display = 'none';
-  document.getElementById('characters-section').style.display = 'none';
-
-  // Calculate MBTI
-  const mbti = dimPairs.map((pair, i) => {
-    let scoreA = 0, scoreB = 0;
-    for (let j = 0; j < 5; j++) {
-      const ans = answers[i * 5 + j];
-      if (ans === pair[0]) scoreA++;
-      else if (ans === pair[1]) scoreB++;
-    }
-    return { letter: scoreA >= scoreB ? pair[0] : pair[1], pct: scoreA >= scoreB ? (scoreA / 5 * 100) : (scoreB / 5 * 100), flipped: scoreB > scoreA };
+  // 1. 累积用户答案向量（加总所有选项权重）
+  const userVec = [0,0,0,0,0,0,0,0];
+  answers.forEach((ans, qi) => {
+    if (ans === null) return;
+    QUESTIONS[qi].opts[ans].w.forEach((w, dim) => { userVec[dim] += w; });
   });
 
-  const mbtiStr = mbti.map(d => d.letter).join('');
-  const ch = CHARACTERS[mbtiStr];
-  const compatChars = COMPAT[mbtiStr];
+  // 2. 计算每个角色的余弦相似度
+  const normUser = Math.sqrt(userVec.reduce((s,v)=>s+v*v,0)) || 1;
+  const scores = CHARS.map(c => {
+    let dot = 0, normChar = 0;
+    for (let d = 0; d < 8; d++) {
+      dot += userVec[d] * c.vector[d];
+      normChar += c.vector[d] * c.vector[d];
+    }
+    normChar = Math.sqrt(normChar) || 1;
+    const sim = dot / (normUser * normChar); // -1 ~ 1
+    return { char:c, sim:sim };
+  });
 
-  // Status bar percentages (based on personality traits)
-  const hpPct = Math.round(60 + (mbti[2].pct * 0.3) + (mbti[0].pct * 0.1));
-  const drivePct = Math.round(50 + (mbti[1].pct * 0.35) + (mbti[3].pct * 0.15));
-  const superPct = Math.round(40 + (mbti[1].pct * 0.4) + (mbti[2].pct * 0.2));
+  // 3. 排序
+  scores.sort((a,b) => b.sim - a.sim);
+  const top = scores[0].char;
+  const similar = scores.slice(1,13); // 取top2-13
 
-  // Build result left
-  const leftEl = document.getElementById('resultLeft');
-  leftEl.innerHTML = `
-    <div class="result-mbti">${mbtiStr}</div>
-    <div class="result-name">${ch.en}</div>
-    <div class="result-cn">${ch.cn}</div>
-    <div class="status-bars">
-      <div class="status-row">
-        <span class="status-label">HP</span>
-        <div class="status-track"><div class="status-fill hp" style="width:${hpPct}%"></div></div>
-        <span style="font-family:var(--font-display);font-size:11px;color:#888;width:36px">${hpPct}%</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">DRIVE</span>
-        <div class="status-track"><div class="status-fill drive" style="width:${drivePct}%"></div></div>
-        <span style="font-family:var(--font-display);font-size:11px;color:#888;width:36px">${drivePct}%</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">SUPER</span>
-        <div class="status-track"><div class="status-fill super" style="width:${superPct}%"></div></div>
-        <span style="font-family:var(--font-display);font-size:11px;color:#888;width:36px">${superPct}%</span>
-      </div>
-    </div>
-    <div class="dim-analysis">
-      ${mbti.map((d, i) => {
-        const pair = dimPairs[i];
-        const names = [['外向','內向'],['實感','直覺'],['思考','情感'],['判斷','感知']];
-        return `
-          <div class="dim-row">
-            <span class="dim-pair left">${pair[0]}</span>
-            <div class="dim-bar-outer">
-              <div class="dim-bar-inner ${d.flipped ? 'right' : 'left'}" style="width:${d.flipped ? 100 - d.pct : d.pct}%"></div>
-            </div>
-            <span class="dim-pair right">${pair[1]}</span>
-          </div>
-        `;
-      }).join('')}
-    </div>
-    <p class="result-desc">${ch.desc}</p>
-    <div class="result-traits">
-      ${ch.traits.map(t => `<span class="trait-tag">${t}</span>`).join('')}
-    </div>
-    <div class="compat-section">
-      <div class="compat-title">最佳搭檔</div>
-      <div class="compat-chars">
-        ${compatChars.map(cid => {
-          const cobj = Object.values(CHARACTERS).find(c => c.id === cid);
-          return cobj ? `<div class="compat-chip"><img src="sf6-chars/${cid}.png" alt="${cobj.en}" onerror="this.style.display='none'"><span>${cobj.en}</span></div>` : '';
-        }).join('')}
-      </div>
-    </div>
-    <div style="margin-top:8px; font-size:13px; color:#888">
-      <p><strong style="color:var(--sf6-green)">優勢：</strong>${ch.strong}</p>
-      <p style="margin-top:4px"><strong style="color:var(--sf6-orange)">成長：</strong>${ch.grow}</p>
-    </div>
-    <div class="result-actions" style="margin-top:24px">
-      <button class="r-btn primary" onclick="shareResult('${mbtiStr}')">分享結果</button>
-      <button class="r-btn secondary" onclick="retakeTest()">重新測試</button>
-    </div>
-  `;
+  // 4. 计算百分比（转化为更直观的 0-100%）
+  const maxSim = scores[0].sim;
+  const minSim = scores[scores.length-1].sim;
+  const range = maxSim - minSim || 1;
+  const pcts = {};
+  scores.forEach(s => {
+    pcts[s.char.id] = Math.round(((s.sim - minSim) / range) * 100);
+  });
 
-  // Build result right (character art)
-  const rightEl = document.getElementById('resultRight');
-  rightEl.innerHTML = `<img src="sf6-chars/${ch.id}.png" alt="${ch.en}" onerror="this.src='data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27600%27><rect fill=%27%23${ch.color.replace("#","")}30%27 width=%27400%27 height=%27600%27/></svg>'">`;
-  rightEl.style.background = `radial-gradient(ellipse at center, ${ch.color}15 0%, transparent 70%)`;
-
-  document.getElementById('result-section').classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Delayed status bar animation
-  setTimeout(() => {
-    document.querySelectorAll('.status-fill').forEach(el => {
-      el.style.width = el.style.width; // force reflow
-    });
-  }, 100);
+  renderResult(top, similar.slice(0,6), pcts);
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('result-screen').classList.add('active');
+  document.getElementById('result-screen').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function shareResult(mbtiStr) {
-  const ch = CHARACTERS[mbtiStr];
-  const text = `🕹️ STREET FIGHTER 6 人格診斷\n\n我的格鬥人格：${mbtiStr}\n對應角色：${ch.en}（${ch.cn}）\n\n${ch.desc}\n\n快來測試你的格鬥人格！`;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => alert('已複製結果到剪貼簿！'));
+function renderResult(char, similar, pcts) {
+  // 背景
+  document.getElementById('result-gradient').style.background = char.gradient;
+
+  // 图片 — 稳健处理
+  const img = document.getElementById('result-img');
+  const fb = document.getElementById('result-emoji-fb');
+  const imgPath = `sf6-chars/${char.id}.png`;
+
+  // 先隐藏两者
+  img.style.display = 'none';
+  fb.style.display = 'none';
+
+  // 尝试载入图片
+  img.src = imgPath;
+  img.onload = () => { img.style.display = ''; fb.style.display = 'none'; };
+  img.onerror = () => { img.style.display = 'none'; fb.style.display = 'flex'; fb.textContent = char.emoji; };
+
+  // 文字
+  document.getElementById('result-type').style.color = char.color;
+  document.getElementById('result-type').textContent = char.tag;
+  document.getElementById('result-name').textContent = char.name;
+  document.getElementById('result-name-cn').textContent = `${char.nameCn} · ${char.nameEn} 人格`;
+  document.getElementById('result-tagline').textContent = `"${char.tagline}"`;
+  document.getElementById('result-tagline').style.borderColor = char.color;
+  document.getElementById('result-desc').textContent = char.desc;
+  document.getElementById('result-meme').textContent = `🎮 ${char.meme}`;
+
+  // 特质条
+  const traitData = [
+    {label:'攻击性', val:char.traits.攻击性||char.vector[0]},
+    {label:'策略感', val:char.traits.策略感||char.vector[1]},
+    {label:'情绪化', val:char.traits.情绪化||char.vector[2]},
+    {label:'社交欲', val:char.traits.社交欲||char.vector[3]},
+    {label:'抗压力', val:char.traits.抗压力||char.vector[4]},
+  ];
+  document.getElementById('trait-bars').innerHTML = traitData.map(t => `
+    <div class="trait-row">
+      <div class="trait-label"><span>${t.label}</span><span>${t.val}%</span></div>
+      <div class="trait-track"><div class="trait-fill" style="width:0%;background:linear-gradient(90deg,${char.color}88,${char.color})" data-val="${t.val}"></div></div>
+    </div>
+  `).join('');
+
+  setTimeout(() => {
+    document.querySelectorAll('.trait-fill').forEach(el => el.style.width = el.dataset.val + '%');
+  }, 200);
+
+  // 优势标签
+  document.getElementById('result-strengths').innerHTML = char.strengths.map(s =>
+    `<span class="str-tag" style="border-color:${char.color}44;color:${char.color}">${s}</span>`
+  ).join('');
+
+  // 相似人格
+  document.getElementById('match-grid').innerHTML = similar.map(s => `
+    <div class="match-card" onclick="highlightChar('${s.char.id}')">
+      <img src="sf6-chars/${s.char.id}.png" alt="${s.char.nameEn}" onerror="this.style.display='none'">
+      <div class="mc-name">${s.char.name}</div>
+      <div class="mc-pct">${pcts[s.char.id]}%</div>
+    </div>
+  `).join('');
+}
+
+function highlightChar(id) {
+  const c = CHARS.find(x => x.id === id);
+  if (!c) return;
+  renderResult(c, CHARS.filter(x=>x.id!==id).slice(0,6), {});
+  document.getElementById('result-screen').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function shareResult() {
+  const name = document.getElementById('result-name').textContent;
+  const meme = document.getElementById('result-meme').textContent.replace('🎮 ','');
+  const text = `🎮 我的 SF6 人格测试结果：【${name} 人格】\n\n${meme}\n\n你也来测测看 👉 https://eroko2020.github.io/sf6-mbti/`;
+  if (navigator.share) {
+    navigator.share({ title:'SF6 人格测试', text });
   } else {
-    prompt('複製以下文字分享：', text);
+    navigator.clipboard.writeText(text).then(() => alert('结果已复制到剪贴板！'));
   }
 }
 
-function retakeTest() {
-  document.getElementById('result-section').classList.remove('active');
-  document.getElementById('home-section').style.display = 'flex';
-  document.getElementById('characters-section').style.display = 'block';
-  answers = {};
-  currentDim = 0;
-  currentQ = 0;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function restartQuiz() {
+  startQuiz();
 }
-
-// ==================== NAVIGATION ====================
-document.querySelectorAll('.sf6-nav a').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const nav = link.dataset.nav;
-    document.querySelectorAll('.sf6-nav a').forEach(l => l.classList.remove('active'));
-    link.classList.add('active');
-    if (nav === 'home') {
-      document.getElementById('home-section').style.display = 'flex';
-      document.getElementById('characters-section').style.display = 'block';
-      document.getElementById('test-section').classList.remove('active');
-      document.getElementById('result-section').classList.remove('active');
-    } else if (nav === 'characters') {
-      document.getElementById('home-section').style.display = 'none';
-      document.getElementById('characters-section').style.display = 'block';
-      document.getElementById('test-section').classList.remove('active');
-      document.getElementById('result-section').classList.remove('active');
-    } else if (nav === 'test') {
-      startTest();
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-
-// Initialize
-init();
 </script>
 </body>
 </html>
